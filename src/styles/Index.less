@@ -1,0 +1,176 @@
+@import "base";
+.index-component {
+  height: 100%;
+  max-width: 980px;
+  margin: auto;
+  .quote{
+    margin-top: 1rem;
+    .steps{
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      li{
+        position: relative;
+        display: inline-block;
+        width: calc((100% - 2 * 1.5rem) / 3);
+        height: 4rem;
+        padding: 1.2rem 0 1.2rem 1.5rem;
+        box-sizing: border-box;
+        margin-right: 1rem;
+        border-radius: .4rem;
+        float: left;
+        font-size: 1rem;
+        line-height: 1.6rem;
+        color: hsla(0,0%,100%,.8);
+        background-color: rgba(137,150,166,.5);
+        text-align: -webkit-match-parent;
+        em{
+          font-style: normal;
+          font-weight: 700;
+          font-size: 2rem;
+          color: #fff;
+          position: absolute;
+        }
+        span{
+          padding-left: 3.8rem;
+          label{
+            display: inline-block;
+            cursor: default;
+          }
+        }
+        &:before{
+          content: '';
+          position: absolute;
+          width: .9rem;
+          height: 100%;
+          background: url(../images/right-arroe.png) no-repeat;
+          background-size: 100%;
+          left: 3.4rem;
+          top: 0;
+        }
+        &.current{
+          background-color:@primary-color;
+        }
+        &:last-child{
+          margin-right: 0;
+        }
+      }
+    }
+    .description{
+      text-align: center;
+      margin: 2rem 0;
+      h1{
+        color: #2d3238;
+        font-weight: 200;
+        font-size: 3rem;
+        margin: 0 0 1rem;
+      }
+      p{
+        font-size: 1rem;
+        color: #979fa8;
+        margin: 0;
+        padding: 0;
+      }
+    }
+    .form{
+      display: block;
+      margin-top: 0em;
+      .platforms{
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        li{
+          position: relative;
+          height: 11.6rem;
+          margin: 0 1.1rem 1rem 0;
+          float: left;
+          color: #979fa8;
+          cursor: pointer;
+          background: #ffffff;
+          border-radius: .4rem;
+          display: list-item;
+          text-align: center;
+          overflow: hidden;
+          &:hover{
+            background: @primary-color;
+            color: #fff;
+          }
+          *{
+            cursor: pointer;
+          }
+          i{
+            font-size: 6.5rem;
+            color: inherit;
+          }
+          .mart-icon{
+            font-family: Coding-Mart;
+            font-style: normal;
+            height: 1em;
+            width: 1em;
+            line-height: 1em;
+          }
+          label{
+            display: inline-block;
+            width: 100%;
+            height: 100%;
+            padding-top: 1.5rem;
+            box-sizing: border-box;
+          }
+          em{
+            display: block;
+            font-style: normal;
+            font-size: 1rem;
+            color: inherit;
+            margin-top: 1rem;
+          }
+          .platform-title{
+            line-height: 1.2rem;
+          }
+          input[type=checkbox]{
+            visibility: hidden;
+            &:checked ~ .checked{
+              visibility: visible;
+            }
+          }
+          .checked{
+            display: inline-block;
+            width: 3.5rem;
+            height: 3.5rem;
+            position: absolute;
+            bottom: -.6rem;
+            right: -.6rem;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            line-height: 3.6rem;
+            box-sizing: border-box;
+            visibility: hidden;
+            opacity: .8;
+            .fa{
+              font-size: 1.5rem;
+              display: inline-block;
+              font: normal normal normal 14px/1 iconfont;
+              font-size: inherit;
+              text-rendering: auto;
+              -webkit-font-smoothing: antialiased;
+              -moz-osx-font-smoothing: grayscale;
+            }
+            .fa-check{
+              font-size: 2rem;
+              line-height: 3.3rem;
+            }
+          }
+          &.current{
+            background: @primary-color;
+            color: #fff;
+          }
+        }
+        .column-short{
+          width: calc((100% - 2 * 1.1rem) / 3);
+          &:nth-child(3n + 3){
+            margin-right: 0;
+          }
+        }
+      }
+    }
+  }
+}

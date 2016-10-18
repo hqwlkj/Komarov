@@ -1,0 +1,54 @@
+@import "base";
+
+.footer-component {
+  width: 100%;
+  background: @footer-bg-coloe;
+  border: none;
+  .content {
+    width: 980px;
+    height: 190px;
+    padding: 15px;
+    margin: 0 auto;
+    background: @footer-bg-coloe;
+    border: none;
+    >.help-contain{
+      border-bottom: 1px solid hsla(0,0%,100%,.2);
+      p{
+        padding-bottom: 8px;
+        overflow: hidden;
+        margin-bottom: 8px;
+        line-height: 27px;
+        span{
+          margin: 0 5px;
+          white-space: nowrap;
+          color: #9cb0cd;
+          a{
+            color: #9cb0cd;
+          }
+        }
+        b{
+          margin: 0 3px;
+          font-weight: 400;
+          color: #9cb0cd;
+          line-height: 27px;
+        }
+      }
+    }
+    .company-info{
+      padding: 20px 0;
+      color: #9cb0cd;
+      p{
+        line-height: 22px;
+      }
+      img{
+        vertical-align: middle;
+      }
+      &:after{
+        display: block;
+        height: 0;
+        visibility: hidden;
+        clear: both;
+      }
+    }
+  }
+}

@@ -15,37 +15,40 @@ import $ from 'jquery';
 import SS from  'parsec-ss';
 import Config from 'config';
 import Main from './components/Main';
-import Index from './components/IndexComponent';
+import StepOne from './components/IndexComponent';
 import Login from './components/LoginComponent';
 import Register from './components/RegisterComponent';
 import MiniLogin from './components/MiniLoginComponent';
+import StepTwo from './components/StepTwoComponent';
+import StepThree from './components/StepThreeComponent';
 
 
 class App extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+  constructor(props) {
+    super(props);
+  }
 
-    //权限验证(是否登录)
-    handleAuth(nextState, replace) {
-        // if (SS.get(Config.token) == null) {
-        //     window.location.href = '#/login';
-        // }
-        return true;
-    }
+  //权限验证(是否登录)
+  handleAuth(nextState, replace) {
+    // if (SS.get(Config.token) == null) {
+    //     window.location.href = '#/login';
+    // }
+    return true;
+  }
 
-    render() {
-        return (
-            <Router history={hashHistory}>
-                <Route path='/login' component={Login}/>
-                <Route path='/register' component={Register}/>
-                <Route path='/minilogin' component={MiniLogin} breadcrumbName='迷你登录'/>
-                <Route path='/' component={Main} breadcrumbName='首页'>
-                    <IndexRoute component={Index}/>
-                </Route>
-            </Router>
-        );
-    }
+  render() {
+    return (
+      <Router history={hashHistory}>
+        <Route path='/login' component={Login}/>
+        <Route path='/register' component={Register}/>
+        <Route path='/' component={Main} breadcrumbName='首页'>
+          <IndexRoute component={StepOne}/>
+          <Route path='/step-2' component={StepTwo} breadcrumbName='第二步'/>
+          <Route path='/step-3' component={StepThree} breadcrumbName='第三步'/>
+        </Route>
+      </Router>
+    );
+  }
 }
 
 

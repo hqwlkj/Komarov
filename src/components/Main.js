@@ -3,29 +3,42 @@ require('styles/App.less');
 
 import React from 'react';
 import {Row, Col} from 'antd';
+import SS from 'parsec-ss';
 
 import Foooter from './FooterComponent';
 import Header from './HeaderComponent';
-import Index from './IndexComponent';
 
+
+import Config from 'config';
 let yeomanImage = require('../images/yeoman.png');
 
 class AppComponent extends React.Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLogin: false
     }
+    this.handleLogin = this.handleLogin.bind(this);
+  }
 
-    render() {
-        return (
-            <div className="container">
-                <Header />
-                <div className="content-wrapper">
-                    <Index />
-                </div>
-                <Foooter/>
-            </div>
-        );
-    }
+  handleLogin(isLogin) {
+    this.setState({isLogin});
+  }
+  isLogin(){
+    return this.state.isLogin;
+  }
+
+  render() {
+    return (
+      <div className="container">
+        <Header />
+        <div className="content-wrapper">
+          {this.props.children}
+        </div>
+        <Foooter/>
+      </div>
+    );
+  }
 }
 
 AppComponent.defaultProps = {};

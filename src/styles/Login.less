@@ -1,3 +1,128 @@
+@import "base";
+
 .login-component {
-  border: 1px dashed #f00;
+  min-height: 100%;
+  position: relative;
+  background: #f0f2f5;
+  *{ outline: none;}
+  > .content-wrapper {
+    padding-top: 64px;
+    min-height: 600px;
+    padding-bottom: 5rem;
+    .account-box-wrapper{
+      margin-top: 98px;
+      margin-bottom: 98px;
+      position: relative;
+      .account-box{
+        position: relative;
+        left: 50%;
+        background: #FFF;
+        box-shadow: 0 2px 5px 0 rgba(0,0,0,.2);
+        border-radius: 7px;
+        padding-bottom: 30px;
+        width: 482px;
+        margin-left: -241px;
+        .account-form-title{
+          padding: 20px 35px;
+          border-bottom: solid 1px rgba(151,159,168,.2);
+          margin-bottom: 35px;
+          label{
+            font-size: 21px;
+            color: #414952;
+          }
+        }
+        .account-input-area{
+          margin: 0 35px 14px;
+          input{
+            &:not(.hasflag) {
+              width: 412px;
+              height: 56px;
+              background: #edf1f5;
+              border: 1px solid #cad3de;
+              border-radius: 5px;
+              padding: 0 20px;
+              font-size: 14px;
+              color: #2D3238;
+              &.short {
+                width: 260px;
+                float: left;
+              }
+            }
+            &:focus,&:hover{
+              border-color: @primary-color;
+              color: @primary-color;
+            }
+          }
+          .captcha {
+            width: 98px;
+            margin-left: 8px;
+            position: relative;
+            top: 14px;
+            cursor: pointer;
+          }
+        }
+        .check-box{
+          margin-top: 30px;
+          margin-left: 35px;
+          position: relative;
+          input[type=checkbox] {
+            display: none;
+            &:checked+label:after {
+              position: absolute;
+              width: 10px;
+              opacity: 1;
+            }
+          }
+          label {
+            border: 1px solid #cad3de;
+            cursor: pointer;
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 0;
+            border-radius: 3px;
+            background: #FFF;
+            &:after {
+              opacity: 0;
+              content: '';
+              height: 7px;
+              background: 0 0;
+              top: 4px;
+              left: 5px;
+              border: 3px solid #333;
+              border-top: none;
+              border-right: none;
+              -webkit-transform: rotate(-45deg);
+              transform: rotate(-45deg);
+            }
+          }
+          span {
+            position: relative;
+            left: 30px;
+            font-size: 14px;
+            color: #8796a8;
+          }
+          a {
+            float: right;
+            margin-right: 35px;
+            color: #4289db;
+            font-size: 14px;
+          }
+        }
+        .account-button{
+          margin: 28px 35px;
+          background: @primary-color;
+          border-radius: 5px;
+          box-shadow: 0 2px 2px 0 rgba(45,51,56,.2);
+          width: 412px;
+          height: 49px;
+          font-size: 18px;
+          color: #FFF;
+          border: none;
+          cursor: pointer;
+          text-align: center;
+        }
+      }
+    }
+  }
 }

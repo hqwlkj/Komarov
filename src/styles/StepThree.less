@@ -1,0 +1,112 @@
+@import "base";
+
+.stepthree-component {
+  height: 100%;
+  max-width: 980px;
+  margin: auto;
+  .quote{
+    margin-top: 1rem;
+    .steps{
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      li{
+        position: relative;
+        display: inline-block;
+        width: calc((100% - 2 * 1.5rem) / 3);
+        height: 4rem;
+        padding: 1.2rem 0 1.2rem 1.5rem;
+        box-sizing: border-box;
+        margin-right: 1rem;
+        border-radius: .4rem;
+        float: left;
+        font-size: 1rem;
+        line-height: 1.6rem;
+        color: hsla(0,0%,100%,.8);
+        background-color: rgba(137,150,166,.5);
+        text-align: -webkit-match-parent;
+        em{
+          font-style: normal;
+          font-weight: 700;
+          font-size: 2rem;
+          color: #fff;
+          position: absolute;
+        }
+        span{
+          padding-left: 3.8rem;
+          label{
+            display: inline-block;
+            cursor: default;
+          }
+        }
+        &:before{
+          content: '';
+          position: absolute;
+          width: .9rem;
+          height: 100%;
+          background: url(../images/right-arroe.png) no-repeat;
+          background-size: 100%;
+          left: 3.4rem;
+          top: 0;
+        }
+        &.current{
+          background-color:@primary-color;
+        }
+        &:last-child{
+          margin-right: 0;
+        }
+      }
+    }
+    .wrapper{
+      margin: 0 0 2rem;
+      position: relative;
+      *{cursor: pointer;}
+      .tabs {
+        list-style: none;
+        padding: 0;
+        margin: 2rem 0 1.1rem;
+        min-height: 300px;
+        .tab-title {
+          margin-right: 20px;
+        }
+        .pane-body-wrapper {
+          position: relative;
+          .functions {
+            position: relative;
+            font-size: 1rem;
+            color: #2d3238;
+            text-align: center;
+            min-height: 450px;
+          }
+        }
+      }
+      .button-wrapper{
+        text-align: center;
+        margin-top: 3rem;
+        .button{
+          width: 33%;
+          height: 4.1rem;
+          line-height: 2.1rem;
+          font-size: 1.5rem;
+          min-width: 17rem;
+          color: #fff;
+          float: none;
+          cursor: pointer;
+          text-align: center;
+          border-radius: .4rem;
+          box-sizing: border-box;
+          border: 0;
+          box-shadow: 0 3px 3px rgba(45,51,56,.2);
+          outline: none;
+          &.disabled{
+            background-color: #8796a8;
+            cursor: not-allowed!important;
+          }
+          &.primary{
+            background-color: @primary-color;
+          }
+        }
+      }
+    }
+  }
+}

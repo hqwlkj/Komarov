@@ -7,6 +7,7 @@ import SS from 'parsec-ss';
 
 import Foooter from './FooterComponent';
 import Header from './HeaderComponent';
+import SideBar from './SideBarComponent';
 
 
 import Config from 'config';
@@ -36,6 +37,7 @@ class AppComponent extends React.Component {
           {this.props.children}
         </div>
         <Foooter/>
+        <SideBar />
       </div>
     );
   }

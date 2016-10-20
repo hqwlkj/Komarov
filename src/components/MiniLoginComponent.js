@@ -19,6 +19,7 @@ class MiniLoginComponent extends React.Component {
       passwordShowType: 'hide'
     }
     this.handleLoginSubmit = this.handleLoginSubmit.bind(this);
+    this.closeLoginWindow = this.closeLoginWindow.bind(this);
     instance = this;
   }
 
@@ -47,6 +48,11 @@ class MiniLoginComponent extends React.Component {
     }
   }
 
+  closeLoginWindow(){
+    this.setState({
+      visible:false
+    });
+  }
   render() {
     let {getFieldDecorator} = this.props.form;
     let values = this.props.form.getFieldsValue();
@@ -55,12 +61,12 @@ class MiniLoginComponent extends React.Component {
       <div className="minilogin-component" style={{display: this.state.visible ? 'block' : 'none'}}>
         <div className="mini-login-modal">
           <div className="mini-login-modal-content">
-            <Button shape="circle-outline" className="mini-login-modal-close"><i className="iconfont">&#xe608;</i></Button>
+            <Button shape="circle-outline" className="mini-login-modal-close" onClick={()=>{this.closeLoginWindow()}}><i className="iconfont">&#xe608;</i></Button>
             <div className="mini-login-modal-header">
               <div className="mini-login-modal-title">账户登录</div>
             </div>
             <div className="mini-login-modal-body">
-              <div className="mini-msg error hide"><i className="iconfont">&#xe60a;</i>这里是提示信息,默认要是隐藏的哦</div>
+              <div className="mini-msg error"><i className="iconfont">&#xe60a;</i>这里是提示信息,默认要是隐藏的哦</div>
               <div className="login-form">
                 <div className="item username">
                   <i className="iconfont">&#xe609;</i>

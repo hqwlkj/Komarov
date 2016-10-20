@@ -85,6 +85,7 @@ class StepTwoComponent extends React.Component {
       name: '其他项目',
       icon: '&#xe604;'
     }];
+
     let platformsChildData = [{
       "text": "\u6ce8\u518c\u767b\u5f55",
       "children": [{
@@ -1604,6 +1605,7 @@ class StepTwoComponent extends React.Component {
     }, {"text": "\u5ba2\u670d\u7cfb\u7edf", "children": [], "idx": 17}]
 
     let selectedPlatformsData = [];
+
     for (let i = 0; i < platformsData.length; i++) {
       for (let j = 0; j < this.state.selectedPaltforms.length; j++) {
         let platform = platformsData[i];
@@ -1630,21 +1632,15 @@ class StepTwoComponent extends React.Component {
         pathname: '/step-2/',
         query: { platforms: this.state.selectedPaltforms.join(',') }
       });
-      let selectedPlatformsData = [];
-      for (let i = 0; i < this.state.platformsData.length; i++) {
-        for (let j = 0; j < this.state.selectedPaltforms.length; j++) {
-          let platform = this.state.platformsData[i];
-          let key = this.state.selectedPaltforms[j];
-          if (platform.id === key) {
-            selectedPlatformsData.push(platform);
-          }
-        }
-      }
       this.setState({
         visiblePaltform: false,
-        selectedPlatformsData
       },()=>{
-        this.loadData();
+        let platforms = this.props.location.query.platforms.split(',');
+        this.setState({
+          selectedPaltforms:platforms
+        },()=>{
+          this.loadData();
+        });
       });
     } else {
       this.setState({
@@ -1656,16 +1652,21 @@ class StepTwoComponent extends React.Component {
 
   //提交计算结果
   submitCalculateResults() {
-    // MiniLogin.show(()=>{
-    //   console.log('xxxxxx');
-    // });
+    MiniLogin.show(()=>{
+      console.log('xxxxxx');
+    });
+    return;
     setTimeout(()=> {
-      //MiniLogin.hide();
+      MiniLogin.hide();
     }, 3000);
     if (SS.get(Config.token === null)) {
+      MiniLogin.show(()=>{
+        console.log('xxxxxx');
+      });
       return;
     }
-    console.log('this.props', this.props);
+
+
     this.props.history.push({
       pathname: '/step-3/',
       query: { platforms: this.state.selectedPaltforms.join(',') }
@@ -1674,7 +1675,8 @@ class StepTwoComponent extends React.Component {
 
 
   render() {
-    console.log(this.state.selectedPaltforms);
+
+    //平台信息
     let paltformItem = (this.state.platformsData || []).map((item, index)=> {
       let check = this.state.selectedPaltforms.filter(id => item.id === id).length != 0;
       return (
@@ -1705,15 +1707,16 @@ class StepTwoComponent extends React.Component {
       );
     });
 
+    //平台功能点
     let tbody = (this.state.platformsChildData || []).map((item, index)=> {//第一节
       if (item.children && item.children.length) {//判断是否有二层子节点
         let children = (item.children || []).map((child, cindex)=> {
           if (cindex == 0) {
             if (child.children && child.children.length) {//判断是否有三层子节点
               let children2 = (child.children || []).map((child2, cindex2)=> {
-                let check = false ;//this.state.selectedItemTwoKeys.filter(id => child.idx === id).length != 0;
+                let check = this.state.selectedItemTwoKeys.filter(id => child.idx === id).length != 0;
                 return (<label key={child2.idx + '-' + cindex2} htmlFor={item.id + '-' + child.idx + '-' + child2.idx}
-                               className="function-label" onMouseOver={(event)=> {
+                               className="function-label" onMouseEnter={(event)=> {
                   let e = event || window.event;
                   let elem_tips = document.querySelector(".preview");
                   let eleTtop = elem_tips.getClientRects()[0].top;
@@ -1733,7 +1736,7 @@ class StepTwoComponent extends React.Component {
                     previewData
                   });
 
-                }} onMouseOut={(event)=>{
+                }} onMouseLeave={(event)=>{
                   let e = event || window.event;
                   if (e.target.nodeName === 'SPAN') {
                     return;
@@ -1753,41 +1756,8 @@ class StepTwoComponent extends React.Component {
               return (
                 <tr className={cindex % 2 ? 'even' : 'odd'} key={child.idx + '-' + cindex}>
                   <td rowSpan={item.children.length}>{item.text}</td>
-                  <td><label htmlFor={child.idx + '-' + cindex} className="module-label" onMouseOver={(event)=> {
-                    let e = event || window.event;
-                    let elem_tips = document.querySelector(".preview");
-                    let eleTtop = elem_tips.getClientRects()[0].top;
-                    var actualTop = e.target.getClientRects()[0].top;
-                    actualTop = actualTop - eleTtop;
-                    actualTop = this.state.previewTop + actualTop - 52;
-                    if (e.target.nodeName === 'SPAN') {
-                      return;
-                    }
-                    let previewData = {
-                      title:'功能点描述',
-                      desc:'鼠标移动到对应的功能点上，此处会显示功能点说明',
-                      img:''
-                    }
-                    this.setState({
-                      previewTop: actualTop,
-                      previewData
-                    });
-
-                  }} onMouseOut={(event)=>{
-                    let e = event || window.event;
-                    if (e.target.nodeName === 'SPAN') {
-                      return;
-                    }
-                    let previewData = {
-                      title:'功能点描述',
-                      desc:'鼠标移动到对应的功能点上，此处会显示功能点说明',
-                      img:''
-                    }
-                    this.setState({
-                      previewData
-                    });
-                  }}>
-                    {child.text}
+                  <td><label htmlFor={child.idx + '-' + cindex} className="module-label">
+                    <span>{child.text}</span>
                     <input type="checkbox" id={child.idx + '-' + cindex} name={item.idx + ',' + child.idx} value='no'
                            onChange={(event)=> {
                              if (event.target.checked) {
@@ -1810,9 +1780,9 @@ class StepTwoComponent extends React.Component {
           } else {
             if (child.children && child.children.length) {//判断是否有二层子节点
               let children2 = (child.children || []).map((child2, cindex2)=> {
-                let check = false ;//this.state.selectedItemTwoKeys.filter(id => child.idx === id).length != 0;
+                let check = this.state.selectedItemTwoKeys.filter(id => child.idx === id).length != 0;
                 return (<label key={child2.idx + '-' + cindex2} htmlFor={item.idx + '-' + child.idx + '-' + child2.idx}
-                               className="function-label" onMouseOver={(event)=> {
+                               className="function-label" onMouseEnter={(event)=> {
                   let e = event || window.event;
                   let elem_tips = document.querySelector(".preview");
                   let eleTtop = elem_tips.getClientRects()[0].top;
@@ -1832,7 +1802,7 @@ class StepTwoComponent extends React.Component {
                     previewData
                   });
 
-                }} onMouseOut={(event)=>{
+                }} onMouseLeave={(event)=>{
                   let e = event || window.event;
                   if (e.target.nodeName === 'SPAN') {
                     return;
@@ -1851,41 +1821,8 @@ class StepTwoComponent extends React.Component {
               });
               return (
                 <tr className={cindex % 2 ? 'even' : 'odd'} key={child.idx + '-' + cindex}>
-                  <td><label htmlFor={item.idx + '-' + child.idx} className="module-label" onMouseOver={(event)=> {
-                    let e = event || window.event;
-                    let elem_tips = document.querySelector(".preview");
-                    let eleTtop = elem_tips.getClientRects()[0].top;
-                    var actualTop = e.target.getClientRects()[0].top;
-                    actualTop = actualTop - eleTtop;
-                    actualTop = this.state.previewTop + actualTop - 52;
-                    if (e.target.nodeName === 'SPAN') {
-                      return;
-                    }
-                    let previewData = {
-                      title:'功能点描述',
-                      desc:'鼠标移动到对应的功能点上，此处会显示功能点说明',
-                      img:''
-                    }
-                    this.setState({
-                      previewTop: actualTop,
-                      previewData
-                    });
-
-                  }} onMouseOut={(event)=>{
-                    let e = event || window.event;
-                    if (e.target.nodeName === 'SPAN') {
-                      return;
-                    }
-                    let previewData = {
-                      title:'功能点描述',
-                      desc:'鼠标移动到对应的功能点上，此处会显示功能点说明',
-                      img:''
-                    }
-                    this.setState({
-                      previewData
-                    });
-                  }}>
-                    {child.text}
+                  <td><label htmlFor={item.idx + '-' + child.idx} className="module-label">
+                    <span>{child.text}</span>
                     <input type="checkbox" id={item.idx + '-' + child.idx} name={item.idx + ',' + child.idx} value='no'
                            onChange={(event)=> {
                              if (event.target.checked) {
@@ -1919,6 +1856,7 @@ class StepTwoComponent extends React.Component {
       }
     });
 
+    //tabs
     let tabPaneItem = (this.state.selectedPlatformsData || []).map((item, index)=> {
       return (
         <Tabs.TabPane tab={<Badge count={2}><span className="tab-title">{item.name}</span></Badge>} key={index}>
@@ -1951,6 +1889,9 @@ class StepTwoComponent extends React.Component {
                   <h2>{this.state.previewData.title}</h2>
                   <article>
                     <p>{this.state.previewData.desc}</p>
+                    <div className="preview-icon" style={{display: this.state.previewData.img === '' ? 'none' : 'block'}}>
+                      <img src="" alt=""/>
+                    </div>
                   </article>
                 </div>
               </div>
@@ -2003,12 +1944,12 @@ class StepTwoComponent extends React.Component {
               </Tabs>
             </Spin>
             <div className="calculate">
-              <button type="submit"
+              <Button type="submit"
                       className={this.state.selectedPaltforms.length > 0 ? 'button primary' : 'button disabled'}
                       onClick={()=> {
                         this.submitCalculateResults()
                       }}>计算结果
-              </button>
+              </Button>
             </div>
           </div>
         </div>

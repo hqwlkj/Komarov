@@ -2,6 +2,7 @@
 
 import React from 'react';
 import {Icon, Button, Form, Radio, Rate, Input} from 'antd';
+import $ from 'jquery';
 import Console from  '../Console';
 
 require('styles//SideBar.less');

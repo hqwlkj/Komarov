@@ -3,7 +3,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Button, Form, Row, Col, Icon} from 'antd';
+import Console from '../Console';
 import Config from 'config';
+import request from '../Request';
+import SS from  'parsec-ss';
 
 require('styles//MiniLogin.less');
 
@@ -16,10 +19,12 @@ class MiniLoginComponent extends React.Component {
     super(props);
     this.state = {
       visible: true,
+      errormsg:'',
       passwordShowType: 'hide'
     }
     this.handleLoginSubmit = this.handleLoginSubmit.bind(this);
     this.closeLoginWindow = this.closeLoginWindow.bind(this);
+    this.login = this.login.bind(this);
     instance = this;
   }
 
@@ -43,9 +48,45 @@ class MiniLoginComponent extends React.Component {
 
   //登录
   handleLoginSubmit() {
-    if(typeof  this.props.onLogin === 'function'){
-      this.props.onLogin();
-    }
+    this.props.form.validateFieldsAndScroll((errors, values) => {
+      if (!!errors) {
+        for (let key in errors) {
+          this.setState({
+            errormsg: errors[key]["errors"][0]["message"]
+          });
+          Console.log(errors[key]["errors"][0]["message"]);
+          return;
+        }
+      }
+      this.login(values);
+    });
+  }
+
+  login(values) {
+    request({
+      type: 'post',
+      url: Config.host + '/login',
+      data: {
+        username:values.username,
+        password:values.password
+      },
+      success: (data)=> {
+        Console.log(data);
+        SS.set(Config.token, data.token);
+        this.setState({
+          errormsg: '',
+          visible:false
+        });
+        if(typeof  this.props.onLogin === 'function'){
+          this.props.onLogin();
+        }
+      },
+      error: (data)=> {
+        this.setState({
+          errormsg:  data.message
+        });
+      }
+    });
   }
 
   closeLoginWindow(){
@@ -54,8 +95,7 @@ class MiniLoginComponent extends React.Component {
     });
   }
   render() {
-    let {getFieldDecorator} = this.props.form;
-    let values = this.props.form.getFieldsValue();
+    const { getFieldDecorator } = this.props.form;
 
     return (
       <div className="minilogin-component" style={{display: this.state.visible ? 'block' : 'none'}}>
@@ -66,33 +106,27 @@ class MiniLoginComponent extends React.Component {
               <div className="mini-login-modal-title">账户登录</div>
             </div>
             <div className="mini-login-modal-body">
-              <div className="mini-msg error"><i className="iconfont">&#xe60a;</i>这里是提示信息,默认要是隐藏的哦</div>
+              <div className={this.state.errormsg === '' ? 'mini-msg error hide' : 'mini-msg error'}><i className="iconfont">&#xe60a;</i>{this.state.errormsg}</div>
               <div className="login-form">
                 <div className="item username">
                   <i className="iconfont">&#xe609;</i>
-                  <input type="text" {...getFieldDecorator("username", {
-                    rules: [{
-                      type: "string",
-                      required: true,
-                      pattern: new RegExp(Config.validateRegExp.tel),
-                      message: "手机号格式不正确"
-                    }]
-                  })} placeholder="手机号"/>
-
+                  {getFieldDecorator('username', {
+                    rules: [
+                      { required: true, pattern: new RegExp(Config.validateRegExp.tel), message: '请输入正确的手机号码', type: 'string'},
+                    ],
+                  })(
+                    <input id="username" name="username" type="text" placeholder="手机号码" autoComplete="off" />
+                  )}
                 </div>
                 <div className="item password">
                   <i className="iconfont">&#xe607;</i>
-                  <input
-                    type={this.state.passwordShowType == 'show' ? 'text' : 'password'} {...getFieldDecorator("password", {
-                    rules: [{type: "string", required: true, pattern: /\S+/, message: "密码格式不正确"}]
-                  })} placeholder="密码"/>
-                  {!!values.password &&
-                  <Icon type="eye" onMouseEnter={()=> {
-                    this.handleEye('show')
-                  }} onMouseOut={()=> {
-                    this.handleEye('hide')
-                  }}/>
-                  }
+                  {getFieldDecorator('password', {
+                    rules: [
+                      { required: true,  pattern: /\S{6,18}/, message: "密码长度为6~18位",type: 'string'},
+                    ],
+                  })(
+                    <input id="password" name="password" type="password" placeholder="密码" autoComplete="off"/>
+                  )}
                 </div>
                 <div className="item">
                   <Button type="primary" className="login-btn" onClick={()=> {

@@ -125,7 +125,7 @@ class IndexComponent extends React.Component {
                   {paltformItem}
               </ul>
               <div className="next">
-                  <button type="button" className={this.state.selectedPaltforms.length > 0 ? 'button primary' : 'button disabled'} onClick={()=>{this.submitPlatform()}}>下一步</button>
+                  <button type="button" disabled={this.state.selectedPaltforms.length > 0 ? false : true} className={this.state.selectedPaltforms.length > 0 ? 'button primary' : 'button disabled'} onClick={()=>{this.submitPlatform()}}>下一步</button>
               </div>
           </div>
         </div>

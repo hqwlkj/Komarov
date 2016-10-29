@@ -2,7 +2,7 @@
 
 import React from 'react';
 import {Icon, Button, Form, Radio, Rate, Input} from 'antd';
-import $ from 'jquery';
+import Console from  '../Console';
 
 require('styles//SideBar.less');
 
@@ -15,6 +15,7 @@ class SideBarComponent extends React.Component {
       feedbackWrapperRight:-500
     };
     this.handleScroll = this.handleScroll.bind(this);
+    this.handleFeedbackSubmit = this.handleFeedbackSubmit.bind(this);
     this.closeFeedbackWindow = this.closeFeedbackWindow.bind(this);
   }
 
@@ -48,6 +49,17 @@ class SideBarComponent extends React.Component {
 
   handleStarsChange(value) {
     this.setState({starsValue: value});
+  }
+
+  handleFeedbackSubmit() {
+    this.props.form.validateFields((errors, values) => {
+      if (errors) {
+        console.log('Errors in form!!!');
+        return;
+      }
+      console.log('Submit!!!');
+      console.log(values);
+    });
   }
 
 
@@ -96,7 +108,7 @@ class SideBarComponent extends React.Component {
                 <Form.Item
                   {...formItemLayout}
                 >
-                  {getFieldDecorator('radio', {
+                  {getFieldDecorator('radio', { initialValue: '1' },{
                     rules: [
                       {required: true, message: '请选择体验类型'},
                     ]
@@ -111,15 +123,15 @@ class SideBarComponent extends React.Component {
                 <Form.Item
                   {...formItemLayout}
                 >
-                  {getFieldDecorator('rate', {
+                  {getFieldDecorator('rate', { initialValue:'1' },{
                     rules: [
-                      {required: true, message: '请选择体验类型'},
+                      {required: true, min:1, message: '请选择体验类型',type:'number'},
                     ],
                   })(
                     <span>
-                      哈哈啊：<Rate onChange={()=> {
-                        this.handleStarsChange()
-                      }} value={this.state.starsValue}/>
+                      哈哈啊：<Rate onChange={(value)=> {
+                        this.handleStarsChange(value)
+                      }} value={this.state.starsValue} />
                       {this.state.starsValue && <span className='ant-rate-text'>{this.state.starsValue} 星</span>}
                     </span>
                   )}
@@ -128,9 +140,17 @@ class SideBarComponent extends React.Component {
                   {...formItemLayout}
                 >
                   {getFieldDecorator('control', {
-                    rules: [
-                      {required: true, min:5, message: '请输入您的反馈信息'},
-                    ],
+                    validate: [{
+                      rules: [
+                        {required: true, min:5, message: '请输入您的反馈信息'},
+                      ],
+                      trigger: 'onBlur',
+                    }, {
+                      rules: [
+                        { type: 'string', min:5, message: '请输入您的反馈信息' },
+                      ],
+                      trigger: ['onBlur', 'onChange'],
+                    }]
                   })(
                     <Input type='textarea' id='control-textarea' rows='5' placeholder='您的反馈对我们来说很重要^.^'/>
                   )}
@@ -138,7 +158,7 @@ class SideBarComponent extends React.Component {
                 <Form.Item
                   {...formItemLayout}
                 >
-                  <Button type='primary'>提交</Button>
+                  <Button type='primary' onClick={()=>{this.handleFeedbackSubmit()}}>提交</Button>
                 </Form.Item>
               </Form>
             </div>

@@ -54,12 +54,12 @@ export default (option)=> {
 
   Object.assign(option, {
     cache: false,
-    // beforeSend: function (xhr) {
-    //   xhr.setRequestHeader(Config.token, SS.get(Config.token) == null ? '' : SS.get(Config.token));
-    //   // xhr.setRequestHeader("Content-Type","application/json");
-    //   // xhr.setRequestHeader(Config.tokenId, SS.get(Config.tokenId) == null ? '' : SS.get(Config.tokenId));
-    // },
-     dataType: 'json',
+    beforeSend: function (xhr) {
+      //xhr.setRequestHeader(Config.token, SS.get(Config.token) == null ? '' : SS.get(Config.token));
+      //xhr.setRequestHeader("Content-Type","application/json");
+      // xhr.setRequestHeader(Config.tokenId, SS.get(Config.tokenId) == null ? '' : SS.get(Config.tokenId));
+    },
+    //dataType: 'json',
     //contentType: "application/json"
   });
 

@@ -11,14 +11,14 @@ import 'core-js/fn/object/assign';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Router, Route, IndexRoute, hashHistory} from 'react-router';
-import $ from 'jquery';
 import SS from  'parsec-ss';
 import Config from 'config';
 import Main from './components/Main';
 import StepOne from './components/IndexComponent';
 import Login from './components/LoginComponent';
 import Register from './components/RegisterComponent';
-import MiniLogin from './components/MiniLoginComponent';
+import UserCenter from './components/UserCenterComponent';
+import PwdSetting from './components/PwdSettingComponent';
 import StepTwo from './components/StepTwoComponent';
 import StepThree from './components/StepThreeComponent';
 
@@ -45,6 +45,8 @@ class App extends React.Component {
           <IndexRoute component={StepOne}/>
           <Route path='/step-2' component={StepTwo} breadcrumbName='第二步'/>
           <Route path='/step-3' component={StepThree} breadcrumbName='第三步'/>
+          <Route path='/user/center' component={UserCenter} breadcrumbName='个人信息'/>
+          <Route path='/password/setting' component={PwdSetting} breadcrumbName='修改密码'/>
         </Route>
       </Router>
     );

@@ -29,6 +29,7 @@ class StepTwoComponent extends React.Component {
       selectedItemTwoKeys: [],
       selectedItemThreeKeys: [],
       defaultActiveKey: '',//默认选择的Tabs KEY
+      selectedPaltformKeysCount: 0,
       previewTop: 0
     }
     this.loadData = this.loadData.bind(this);
@@ -48,8 +49,7 @@ class StepTwoComponent extends React.Component {
   }
 
   loadData(idx) {
-    // debugger;
-    let platformsData = this.state.platformsData;
+    let platformsData = this.state.selectedPlatformsData;
     let platform = platformsData.filter(item=>item.idx === idx)[0];
     if (!platform.children) {
       request({
@@ -60,7 +60,7 @@ class StepTwoComponent extends React.Component {
           console.log(data);
           platform.children = data.data;
           this.setState({
-            platformsData: platformsData
+            selectedPlatformsData: platformsData
           });
         }
       });
@@ -68,11 +68,9 @@ class StepTwoComponent extends React.Component {
   }
 
   initData(props) {
-    // this.setState({
-    //   loading: true,
-    //   platformsData: [],
-    //   platformsChildData: []
-    // });
+    this.setState({
+      loading: true
+    });
     let platforms = props.location.query.platforms.split(',');
 
     let platformsData = [{
@@ -96,13 +94,11 @@ class StepTwoComponent extends React.Component {
       name: '前端项目',
       icon: '&#xe600;'
     }, {
-      idx: 'P006',
+      idx: 'P100',
       name: '其他项目',
       icon: '&#xe604;'
     }];
 
-    // platformsChildData = data.data;
-    //
     let selectedPlatformsData = [];
     for (let i = 0; i < platformsData.length; i++) {
       for (let j = 0; j < platforms.length; j++) {
@@ -113,14 +109,14 @@ class StepTwoComponent extends React.Component {
         }
       }
     }
-    // this.setState({
-    //   loading: false,
-    //   platformsData,
-    //   platformsChildData,
-    //   selectedPlatformsData
-    // });
+    selectedPlatformsData.push({
+      idx: 'P006',
+      name: '管理后台',
+      icon: ''
+    });
 
     this.setState({
+      loading: false,
       selectedPaltforms: platforms,
       defaultActiveKey: platforms[0] || platformsData[0].idx,
       platformsData,
@@ -145,7 +141,6 @@ class StepTwoComponent extends React.Component {
   }
 
   headerTabsChange(key) {
-    console.log('headerTabsChange ===> ', key);
     this.setState({
       defaultActiveKey: key
     }, ()=> {
@@ -179,18 +174,13 @@ class StepTwoComponent extends React.Component {
 
 
   getValues(parent) {
-    // debugger;
-    let falseLength = 0;
     let values = parent.map((item)=> {
-      // debugger;
       let obj = {};
       if (!item.children) {
         obj[item.idx] = '';
         if (!item.checked) {
-          // falseLength++;
           return undefined;
         }
-
       } else {
         obj[item.idx] = this.getValues(item.children);
         if (obj[item.idx].length == 0) {
@@ -199,31 +189,25 @@ class StepTwoComponent extends React.Component {
       }
       return obj;
     });
-    // if(falseLength === values.length){
-    //   return undefined;
-    // }
-
     return values.filter(x=>x != undefined);
   }
 
   //提交计算结果
   submitCalculateResults() {
-    let values = this.getValues(this.state.platformsData);
-    console.log(values);
-    setTimeout(()=> {
-      //MiniLogin.hide();
-    }, 3000);
-    // if (SS.get(Config.token) === null) {
-    //   MiniLogin.show(()=> {
-    //     console.log('xxxxxx');
-    //   });
-    //   return;
-    // }
-    //
-    // this.props.history.push({
-    //   pathname: '/step-3/',
-    //   query: {platforms: this.state.selectedPaltforms.join(',')}
-    // });
+    let values = this.getValues(this.state.selectedPlatformsData);
+    if (SS.get(Config.token) === null) {
+      MiniLogin.show(()=> {
+        this.props.history.push({
+          pathname: '/step-3/',
+          query: {platformsKeys: JSON.stringify(values)}
+        });
+      });
+      return;
+    }
+    this.props.history.push({
+      pathname: '/step-3/',
+      query: {platformsKeys: JSON.stringify(values)}
+    });
   }
 
 
@@ -261,11 +245,8 @@ class StepTwoComponent extends React.Component {
     });
 
     //平台功能点
-    let platform = this.state.platformsData.filter(item=>item.idx === this.state.defaultActiveKey)[0];
-    // debugger;
+    let platform = this.state.selectedPlatformsData.filter(item=>item.idx === this.state.defaultActiveKey)[0];
     let tbody = (platform.children || []).map((item, index)=> {//第一节
-      // console.log("x:",item);
-      // return (<span>1111</span>);
       if (item.children && item.children.length) {//判断是否有二层子节点
         let children = (item.children || []).map((child, cindex)=> {
           if (child.children && child.children.length) {//判断是否有三层子节点
@@ -313,14 +294,17 @@ class StepTwoComponent extends React.Component {
                         onChange={(event)=> {
                           child2.checked = event.target.checked;
                           let count = platform.count || 0;
+                          let selectedPaltformKeysCount = this.state.selectedPaltformKeysCount;
                           if (event.target.checked) {
                             count++;
+                            selectedPaltformKeysCount++;
                           } else {
                             count--;
+                            selectedPaltformKeysCount--;
                             child.checked = false;
                           }
                           platform.count = count;
-                          this.setState({platform});
+                          this.setState({platform, selectedPaltformKeysCount});
                         }}/>
                 {eval("'" + child2.text + "'")}
               </label>);
@@ -336,21 +320,24 @@ class StepTwoComponent extends React.Component {
                          onChange={(event)=> {
                            child.checked = event.target.checked;
                            let count = platform.count || 0;
+                           let selectedPaltformKeysCount = this.state.selectedPaltformKeysCount;
                            if (event.target.checked) {
                              count += child.children.length;
+                             selectedPaltformKeysCount += child.children.length;
                              child.children.map((x)=> {
                                x.checked = true;
                                return x;
                              });
                            } else {
                              count -= child.children.length;
+                             selectedPaltformKeysCount -= child.children.length;
                              child.children.map((x)=> {
                                x.checked = false;
                                return x;
                              });
                            }
                            platform.count = count;
-                           this.setState({platform});
+                           this.setState({platform,selectedPaltformKeysCount});
                          }}/>
                 </label></td>
                 <td>{children2}</td>
@@ -372,11 +359,7 @@ class StepTwoComponent extends React.Component {
 
     //tabs
     let defaultActiveKey = this.state.defaultActiveKey;
-    let tabPaneItem = (this.state.selectedPlatformsData || []).map((item, index)=> {
-      // if (index === 0 && this.state.defaultActiveKey === '') {
-      //   defaultActiveKey = item.id;
-      // }
-      console.log(item.count);
+    let tabPaneItem = (this.state.selectedPlatformsData || []).map((item)=> {
       return (
         <Tabs.TabPane tab={<Badge count={item.count || 0}><span className="tab-title">{item.name}</span></Badge>}
                       key={item.idx}>
@@ -472,7 +455,8 @@ class StepTwoComponent extends React.Component {
             </Spin>
             <div className="calculate">
               <Button type="submit"
-                      className={this.state.selectedPaltforms.length > 0 ? 'button primary' : 'button disabled'}
+                      className={this.state.selectedPaltformKeysCount > 0 ? 'button primary' : 'button disabled'}
+                      disabled={this.state.selectedPaltformKeysCount > 0 ? false : true}
                       onClick={()=> {
                         this.submitCalculateResults()
                       }}>计算结果

@@ -36,6 +36,7 @@
         }
         .account-input-area{
           margin: 0 35px 14px;
+          min-height: 56px;
           input{
             &:not(.hasflag) {
               width: 412px;
@@ -87,10 +88,11 @@
             height: 56px;
             float: left;
             border-radius: 5px;
-            padding-left: 1em;
+            padding-left: 20px;
             border: 1px solid #cad3de;
             background: #edf1f5;
             box-sizing: border-box;
+            margin-bottom: 7px;
             #phone {
               border: 0;
               padding: 0;
@@ -120,8 +122,8 @@
             float: right;
           }
           .format-error {
-            box-shadow: 0 0 5px rgba(230,30,11,.5);
-            border: 1px solid rgba(230,30,11,.5);
+            box-shadow: 0 0 5px rgba(230,30,11,.5) !important;
+            border: 1px solid rgba(230,30,11,.5) !important;
           }
           &.icheckbox{
             position: relative;

@@ -23,7 +23,8 @@ class StepThreeComponent extends React.Component {
   }
 
   componentWillMount(){
-    let platforms = this.props.location.query.platforms.split(',');
+    let platforms = this.props.location.query.platformsKeys;
+    console.log('========',platforms);
     this.setState({
       selectedPaltforms: platforms
     }, ()=> {
@@ -66,6 +67,17 @@ class StepThreeComponent extends React.Component {
         }
       }
     }
+    requset({
+      type:'post',
+      url:Config.host + '/filtertree',
+      data:{
+        idxtree:JSON.parse(this.state.selectedPaltforms),
+        token: new Date().getTime()
+      },
+      success:(data)=>{
+        console.log('data',data);
+      }
+    })
     setTimeout(()=> {
       this.setState({
         loading: false,

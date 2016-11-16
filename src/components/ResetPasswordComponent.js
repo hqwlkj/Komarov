@@ -11,22 +11,24 @@ import Config from 'config';
 import request from '../Request';
 import SS from  'parsec-ss';
 
-require('styles//Register.less');
+require('styles//ResetPassword.less');
 
-class RegisterComponent extends React.Component {
+class ResetPasswordComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      visibleSuccess: true,
+      visibleSuccess: false,
       errorMap: {},
-      verifycodeTime:0
+      verifycodeTime:0,
+      resetStep:'reset-step-1'
     };
     this.handleRegSubmit = this.handleRegSubmit.bind(this);
     this.maskPopClose = this.maskPopClose.bind(this);
     this.checkPass2 = this.checkPass2.bind(this);
     this.getVerifiCationCode = this.getVerifiCationCode.bind(this);
     this.handleFormItemFocus = this.handleFormItemFocus.bind(this);
-    this.register = this.register.bind(this);
+    this.handleResetPwdStep = this.handleResetPwdStep.bind(this);
+    this.resetPwd = this.resetPwd.bind(this);
     this.interval = setInterval(()=> {
       if (this.state.verifycodeTime <= 0) {
         return;
@@ -38,10 +40,23 @@ class RegisterComponent extends React.Component {
   }
 
   componentWillMount() {
+    console.log('componentWillMount');
     MiniLogin.hide();
+    let account = this.props.location.query.account;
+    if(!!this.props.location.query.account){
+      console.log('account',account);
+      this.setState({resetStep:'reset-step-2', errorMap: {} },()=>{
+        this.props.history.replace({
+          pathname: 'resetPassword',
+          query: {account: account}
+        });
+        this.props.form.setFieldsValue({'phone':account});
+      });
+    }
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log('componentWillReceiveProps');
     MiniLogin.hide();
     if (this.xhr && this.xhr.abort) {
       this.xhr.abort();
@@ -53,6 +68,10 @@ class RegisterComponent extends React.Component {
       this.xhr.abort();
     }
     clearInterval(this.interval);
+    console.log('componentWillUnmount');
+  }
+  componentDidMount(){
+    console.log('componentDidMount');
   }
 
   handleRegSubmit() {
@@ -68,7 +87,7 @@ class RegisterComponent extends React.Component {
         });
         return;
       }
-      this.register(values);
+      this.resetPwd(values);
     });
   }
 
@@ -98,7 +117,7 @@ class RegisterComponent extends React.Component {
     }
   }
 
-  register(values) {
+  resetPwd(values) {
     request({
       type: 'post',
       url: Config.host + '/register',
@@ -152,25 +171,21 @@ class RegisterComponent extends React.Component {
           errorMap: errorMap,
           verifycodeTime: 60
         });
-        request({
-          type: 'post',
-          url: Config.host + '/requestsmscode',
-          data: {
-            phone: values.phone
-          },
-          success: (data)=> {
-            Console.log(data);
-            notification['success']({
-              duration:3,
-              message: '手机验证码发送成功'
-            });
-          },
-          error: (data)=> {
-            this.setState({
-              errorMap: data.message
-            });
-          }
-        });
+        // request({
+        //   type: 'post',
+        //   url: Config.host + '/verifyCode',
+        //   data: {
+        //     username: values.phone
+        //   },
+        //   success: (data)=> {
+        //     Console.log(data);
+        //   },
+        //   error: (data)=> {
+        //     this.setState({
+        //       errorMap: data.message
+        //     });
+        //   }
+        // });
       });
     });
   }
@@ -219,35 +234,6 @@ class RegisterComponent extends React.Component {
     // });
   }
 
-  handleVerifyKey(username){
-    let errorMap = this.state.errorMap;
-    if (!username) {
-      errorMap['global_key'] = '用户名不能为空';
-      this.setState({
-        errorMap: errorMap
-      });
-      return;
-    }else if(!Config.validateRules.isRealName(username)){
-      errorMap['global_key'] = '请输入正确的用户名';
-      this.setState({
-        errorMap: errorMap
-      });
-      return;
-    }
-    // this.xhr = request({
-    //   url: Config.host + '',
-    //   data: {username: username},
-    //   success: (data)=> {
-    //     if (!data.result) {
-    //       this.setState({phoneIsVerify: true, errorMap: {}});
-    //     } else {
-    //       let err = {};
-    //       err['global_key'] = '用户名已存在';
-    //     }
-    //   }
-    // });
-  }
-
   //获取光标移除对应的错误信息
   handleFormItemFocus(key){
     let errorMap = this.state.errorMap;
@@ -257,37 +243,97 @@ class RegisterComponent extends React.Component {
     });
   }
 
+  handleResetPwdStep(account){
+    let errorMap = this.state.errorMap;
+    if (!account) {
+      errorMap['account'] = '手机号码不能为空';
+      this.setState({
+        errorMap: errorMap
+      });
+      return;
+    }else if(!Config.validateRules.isMobile(account)){
+      errorMap['account'] = '请输入正确的手机号码';
+      this.setState({
+        errorMap: errorMap
+      });
+      return;
+    }
+
+    this.setState({resetStep:'reset-step-2', errorMap: {} },()=>{
+      this.props.history.replace({
+        pathname: 'resetPassword',
+        query: {account: account}
+      });
+      this.props.form.setFieldsValue({'phone':account});
+    });
+
+    // this.xhr = request({
+    //   url: Config.host + '',
+    //   data: {username: account},
+    //   success: (data)=> {
+    //     if (data.result) {
+    //        this.setState({resetStep:'reset-step-2', errorMap: {} });
+    //     } else {
+    //       let err = {};
+    //       err['account'] = '手机号不已存在';
+    //       this.setState({errorMap: err });
+    //     }
+    //   }
+    // });
+  }
+
+
   render() {
     const {getFieldDecorator} = this.props.form;
     return (
-      <div className='register-component'>
+      <div className='resetpassword-component'>
         <Header />
         <div className='content-wrapper'>
+          {/*第一步*/}
+          { this.state.resetStep != 'reset-step-1' ||
+          <div className='account-box-wrapper'>
+            <div className='account-box'>
+              <div className='register-form'>
+                <div className='account-form-title'>
+                  <label htmlFor=''>找回密码</label>
+                </div>
+                <div className='account-input-area'>
+                  {getFieldDecorator('account', {
+                    rules: [
+                      { required: true, type: 'string', pattern: new RegExp(Config.validateRegExp.mobile), message: '请输入正确的手机号码', max:11 }
+                    ]
+                  })(
+                    <Input name='account' type='text' placeholder='手机号' autoComplete='off' onFocus={()=>{this.handleFormItemFocus('account')}}
+                           className={classnames({'format-error' : this.state.errorMap.account})} />
+                  )}
+                  {!this.state.errorMap.account ||
+                  <div className='format-error-label' name='gk_format_error'>
+                    <span><i className='iconfont'>&#xe60a;</i></span>
+                    <span className='error-message'>{this.state.errorMap['account']}</span>
+                  </div>
+                  }
+                </div>
+
+                <Button className='account-button' htmlType='button' onClick={()=> {
+                  this.handleResetPwdStep((document.querySelector('input[id=account]') || {}).value)
+                }}><span>下一步</span>
+                </Button>
+
+                <div className='account-bottom-tip to-login'>
+                  <label><a href="javascript:history.back(-1);">返回</a></label>
+                </div>
+              </div>
+            </div>
+          </div>
+          }
+          {/*第二部*/}
+          { this.state.resetStep != 'reset-step-2' ||
           <div className='account-box-wrapper'>
             <div className='account-box'>
               <Form horizontal>
                 <div className='register-form'>
                   <div className='account-form-title'>
-                    <label htmlFor=''>账号注册</label>
-                  </div>
-                  <div className='account-input-area'>
-                    {getFieldDecorator('global_key', {
-                      rules: [
-                        {required: true, message: '个性后缀至少为3位字符', min: 3, type: 'string'},
-                      ]
-                    })(
-                      <Input name='global_key' type='text' placeholder='用户名 (即个性后缀，注册后无法修改)'
-                             className={classnames({'format-error' : this.state.errorMap.global_key})} autoComplete='off'
-                             onBlur={()=>{this.handleVerifyKey((document.querySelector('input[id=global_key]') || {}).value);}}
-                             onFocus={()=>{this.handleFormItemFocus('global_key')}}
-                      />
-                    )}
-                    {!this.state.errorMap.global_key ||
-                    <div className='format-error-label' name='gk_format_error'>
-                      <span><i className='iconfont'>&#xe60a;</i></span>
-                      <span className='error-message'>{this.state.errorMap['global_key']}</span>
-                    </div>
-                    }
+                    <label htmlFor=''>找回密码</label>
                   </div>
                   <div className='account-input-area'>
                     <div className={classnames('phone-wrapper',{'format-error' : this.state.errorMap.phone})} >
@@ -315,7 +361,7 @@ class RegisterComponent extends React.Component {
                   <div className='account-input-area'>
                     {getFieldDecorator('verification_code', {
                       rules: [
-                        {required: true, min: 4, message: '手机验证码不能为空', type: 'number'}
+                        {required: true, message: '手机验证码不能为空', type: 'string'}
                       ]
                     })(
                       <Input name='verification_code' type='number' className={classnames({'format-error' : this.state.errorMap.verification_code})} placeholder='手机验证码' autoComplete='off'
@@ -374,44 +420,22 @@ class RegisterComponent extends React.Component {
                   </div>
 
                   <div className='account-input-area account-captcha hide'>
-                    <Input id='captcha' name='captcha' type='text' placeholder='验证码' className='short'
-                           autoComplete='off'/>
-                    <img className='captcha' alt='验证码' src='https://coding.net/api/getCaptcha?code=0.4359082529552596'/>
+                    <Input id='captcha' name='captcha' type='text' placeholder='验证码' className='short' autoComplete='off'/>
+                    <img className='captcha' alt='验证码' src=''/>
                   </div>
 
-
-                  <div className='account-input-area icheckbox'>
-                    {getFieldDecorator('agreement', {
-                      rules: [{required: true, message: '请阅读并勾选用户协议', type: 'boolean'}]
-                    })(
-                      <Input name='agreement' type='checkbox' onChange={(event)=>{
-                        if(event.target.checked){
-                          this.handleFormItemFocus('agreement')
-                        }
-                      }}/>
-                    )}
-                    <label htmlFor='agreement'>
-                      <div className='icheckbox-square-parsec'></div>
-                      &nbsp;我同意遵守<a href='#/agreement' target='_blank'>《用户服务协议》</a>
-                    </label>
-                    {!this.state.errorMap.agreement ||
-                    <div className='format-error-label' name='agreement_format_error'>
-                      <span><i className='iconfont'>&#xe60a;</i></span>
-                      <span className='error-message'>{this.state.errorMap['agreement']}</span>
-                    </div>
-                    }
-                  </div>
-
-                  <Button className='account-button' type='button' onClick={()=> {this.handleRegSubmit()}}><span>注册</span>
+                  <Button className='account-button' htmlType='button' onClick={()=> {
+                    this.handleRegSubmit()
+                  }}><span>重置密码</span>
                   </Button>
 
                   <div className='account-bottom-tip to-login'>
-                    <label>已注册过帐号？<a href='#/login'>点击登录！</a></label>
+                    <label><a href="javascript:history.back(-1);">返回</a></label>
                   </div>
                 </div>
               </Form>
             </div>
-            {/*注册成功的提示弹窗*/}
+            {/*密码重置成功的提示弹窗*/}
             <div className='modal-mask-layer' style={{display: this.state.visibleSuccess ? ' block' : 'none'}}></div>
             <div id='survey-pop-box' className='survey-pop-box'
                  style={{display: this.state.visibleSuccess ? ' block' : 'none'}}>
@@ -425,16 +449,17 @@ class RegisterComponent extends React.Component {
                     <span className='success-icon'>
                       <i className='iconfont'>&#xe60b;</i>
                     </span>
-                  <span className='success-words'>恭喜您，注册成功！</span>
+                  <span className='success-words'>恭喜您,密码重置成功！</span>
                 </div>
                 <div className='survey-detail'>
                   <Button className='btn' onClick={()=> {
                     window.location.href = '#/'
-                  }}>立即使用</Button>
+                  }}>立即登录</Button>
                 </div>
               </div>
             </div>
           </div>
+          }
         </div>
         <Foooter/>
       </div>
@@ -442,10 +467,10 @@ class RegisterComponent extends React.Component {
   }
 }
 
-RegisterComponent.displayName = 'RegisterComponent';
-RegisterComponent = new Form.create()(RegisterComponent);
+ResetPasswordComponent.displayName = 'ResetPasswordComponent';
+ResetPasswordComponent = new Form.create()(ResetPasswordComponent);
 // Uncomment properties you need
-// RegisterComponent.propTypes = {};
-// RegisterComponent.defaultProps = {};
+// ResetPasswordComponent.propTypes = {};
+// ResetPasswordComponent.defaultProps = {};
 
-export default RegisterComponent;
+export default ResetPasswordComponent;

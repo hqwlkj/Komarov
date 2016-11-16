@@ -1,9 +1,10 @@
 'use strict';
 
 import React from 'react';
-import {Icon, Button, Form, Radio, Rate, Input} from 'antd';
-import $ from 'jquery';
+import {Icon, Button, Form, Radio, Rate, Input, Modal} from 'antd';
+import Config from 'config';
 import Console from  '../Console';
+import request from '../Request';
 
 require('styles//SideBar.less');
 
@@ -43,6 +44,7 @@ class SideBarComponent extends React.Component {
   }
 
   closeFeedbackWindow() {
+    this.props.form.resetFields();
     this.setState({
       feedbackWrapperRight:-500
     });
@@ -58,8 +60,20 @@ class SideBarComponent extends React.Component {
         console.log('Errors in form!!!');
         return;
       }
-      console.log('Submit!!!');
       console.log(values);
+      request({
+        type:'post',
+        url: Config.host + '/feedback/email',
+        data:values,
+        success:()=>{
+          this.closeFeedbackWindow();
+          Modal.success({
+            title: '反馈成功',
+            content: '感谢您对我们的支持，我们会认真处理您反馈的信息。',
+            okText:'关闭'
+          });
+        }
+      })
     });
   }
 
@@ -106,41 +120,63 @@ class SideBarComponent extends React.Component {
             </div>
             <div className='feedback-form'>
               <Form horizontal>
+                {/*<Form.Item*/}
+                  {/*{...formItemLayout}*/}
+                {/*>*/}
+                  {/*{getFieldDecorator('rate', { initialValue:'1' },{*/}
+                    {/*rules: [*/}
+                      {/*{required: true, min:1, message: '请选择体验类型',type:'number'},*/}
+                    {/*],*/}
+                  {/*})(*/}
+                    {/*<span>*/}
+                      {/*哈哈啊：<Rate onChange={(value)=> {*/}
+                        {/*this.handleStarsChange(value)*/}
+                      {/*}} value={this.state.starsValue} />*/}
+                      {/*{this.state.starsValue && <span className='ant-rate-text'>{this.state.starsValue} 星</span>}*/}
+                    {/*</span>*/}
+                  {/*)}*/}
+                {/*</Form.Item>*/}
                 <Form.Item
                   {...formItemLayout}
                 >
-                  {getFieldDecorator('radio', { initialValue: '1' },{
+                  {getFieldDecorator('username', {
+                    rules: [
+                      {required: true, max:11, message: '请输入你的姓名',type:'string'},
+                    ],
+                  })(
+                    <Input autoComplete="off" placeholder="请输入你的姓名"/>
+                  )}
+                </Form.Item>
+                <Form.Item
+                  {...formItemLayout}
+                >
+                  {getFieldDecorator('contact',{
+                    rules: [
+                      {required: true, max:11, message: '请输入你的手机号码',type:'string'},
+                    ],
+                  })(
+                    <Input autoComplete="off" placeholder="请输入你的手机号码"/>
+                  )}
+                </Form.Item>
+                <Form.Item
+                  {...formItemLayout}
+                >
+                  {getFieldDecorator('type', { initialValue: '体验反馈' },{
                     rules: [
                       {required: true, message: '请选择体验类型'},
                     ]
                   })(
                     <Radio.Group>
-                      <Radio value='1'>体验反馈</Radio>
-                      <Radio value='2'>功能反馈</Radio>
-                      <Radio value='3'>BUG反馈</Radio>
+                      <Radio value='体验反馈'>体验反馈</Radio>
+                      <Radio value='功能反馈'>功能反馈</Radio>
+                      <Radio value='BUG反馈'>BUG反馈</Radio>
                     </Radio.Group>
                   )}
                 </Form.Item>
                 <Form.Item
                   {...formItemLayout}
                 >
-                  {getFieldDecorator('rate', { initialValue:'1' },{
-                    rules: [
-                      {required: true, min:1, message: '请选择体验类型',type:'number'},
-                    ],
-                  })(
-                    <span>
-                      哈哈啊：<Rate onChange={(value)=> {
-                        this.handleStarsChange(value)
-                      }} value={this.state.starsValue} />
-                      {this.state.starsValue && <span className='ant-rate-text'>{this.state.starsValue} 星</span>}
-                    </span>
-                  )}
-                </Form.Item>
-                <Form.Item
-                  {...formItemLayout}
-                >
-                  {getFieldDecorator('control', {
+                  {getFieldDecorator('message', {
                     validate: [{
                       rules: [
                         {required: true, min:5, message: '请输入您的反馈信息'},

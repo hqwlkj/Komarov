@@ -11,8 +11,6 @@ import 'core-js/fn/object/assign';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Router, Route, IndexRoute, hashHistory} from 'react-router';
-import SS from  'parsec-ss';
-import Config from 'config';
 import Main from './components/Main';
 import StepOne from './components/IndexComponent';
 import Login from './components/LoginComponent';
@@ -21,6 +19,10 @@ import UserCenter from './components/UserCenterComponent';
 import PwdSetting from './components/PwdSettingComponent';
 import StepTwo from './components/StepTwoComponent';
 import StepThree from './components/StepThreeComponent';
+import ResetPassword from './components/ResetPasswordComponent';
+import Projects from './components/ProjectsComponent';
+import FunctionList from './components/FunctionListComponent';
+import View from './components/ViewComponent';
 
 
 class App extends React.Component {
@@ -41,12 +43,16 @@ class App extends React.Component {
       <Router history={hashHistory}>
         <Route path='/login' component={Login}/>
         <Route path='/register' component={Register}/>
+        <Route path='/resetPassword' component={ResetPassword}/>
+        <Route path='/projects/view/:hash' component={View} breadcrumbName='预览清单'/>
         <Route path='/' component={Main} breadcrumbName='首页'>
           <IndexRoute component={StepOne}/>
           <Route path='/step-2' component={StepTwo} breadcrumbName='第二步'/>
           <Route path='/step-3' component={StepThree} breadcrumbName='第三步'/>
           <Route path='/user/center' component={UserCenter} breadcrumbName='个人信息'/>
           <Route path='/password/setting' component={PwdSetting} breadcrumbName='修改密码'/>
+          <Route path='/user/projects' component={Projects} breadcrumbName='我的项目'/>
+          <Route path='/user/projects/:id' component={FunctionList} breadcrumbName='功能清单'/>
         </Route>
       </Router>
     );

@@ -95,6 +95,8 @@ export default {
   loginOutMsg: 'loginOutMsg',//登录提示信息
   expireTime:'expireTime',
   unreadNum:'unreadNum',//未读消息总条数
+  platformsKeys:'platformsKeys',//idxtree 数据
+  project:'project',//项目数据
   validateRegExp: validateRegExp,
   dateFormat:{
     formatMobile:(str)=> {

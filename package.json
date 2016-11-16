@@ -6,7 +6,7 @@
   "main": "",
   "scripts": {
     "clean": "rimraf dist/*",
-    "copy": "copyfiles -f ./src/index.html ./src/favicon.ico ./dist",
+    "copy": "copyfiles -f ./src/errorpage.html ./src/index.html ./src/favicon.ico ./dist",
     "dist": "npm run copy & webpack --env=dist",
     "lint": "eslint ./src",
     "posttest": "npm run lint",
@@ -72,10 +72,14 @@
     "webpack-dev-server": "^1.12.0"
   },
   "dependencies": {
+    "base-64": "^0.1.0",
     "classnames": "^2.2.5",
+    "clipboard": "^1.5.15",
     "core-js": "^2.0.0",
+    "date-format": "0.0.2",
     "normalize.css": "^4.0.0",
     "react": "^15.3.2",
-    "react-dom": "^15.3.2"
+    "react-dom": "^15.3.2",
+    "transfer-webpack-plugin": "^0.1.4"
   }
 }

@@ -1,12 +1,11 @@
 'use strict';
 
 import React from 'react';
-import {Tabs, Button, Badge, Spin, Tooltip} from 'antd';
+import {Tabs, Button, Badge, Spin, Tooltip, Modal, Checkbox} from 'antd';
 import MiniLogin from './MiniLoginComponent';
 import classnames from 'classnames';
 import SS from 'parsec-ss';
 import Config from 'config';
-import console from '../Console';
 import request from '../Request';
 
 require('styles//StepTwo.less');
@@ -38,6 +37,7 @@ class StepTwoComponent extends React.Component {
     this.editPaltform = this.editPaltform.bind(this);
     this.headerTabsChange = this.headerTabsChange.bind(this);
     this.submitCalculateResults = this.submitCalculateResults.bind(this);
+    this.handleFunctionItemChange = this.handleFunctionItemChange.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -49,21 +49,84 @@ class StepTwoComponent extends React.Component {
   }
 
   loadData(idx) {
+    let project = SS.getObj(Config.project);
     let platformsData = this.state.selectedPlatformsData;
     let platform = platformsData.filter(item=>item.idx === idx)[0];
     if (!platform.children) {
       request({
         type: 'get',
         url: Config.host + '/fea',
-        data: {},
+        data: {
+          idx:idx
+        },
         success: (data)=> {
-          console.log(data);
-          platform.children = data.data;
+          platform.children = data.result;
+          let selectedPaltformKeysCount = this.state.selectedPaltformKeysCount;
+          platform.count = platform.count || 0;
+          if(!!project){
+            let functionItem = project.idxtree;
+            platform = this.checkDefultFuntionItem(platform,functionItem,selectedPaltformKeysCount);
+          }
           this.setState({
+            loading: false,
             selectedPlatformsData: platformsData
+          });
+        },
+        error:()=>{
+          this.setState({
+            loading: false
           });
         }
       });
+    }
+  }
+
+
+  checkDefultFuntionItem(platform,functionItem,selectedPaltformKeysCount){
+    (functionItem || []).map((fun)=>{
+      for(let key in fun){
+        for(let i = 0; i < fun[key].length; i++){
+          (platform.children || []).map((item)=> {//第一节
+            if(this.getIdx(fun[key][i]) === item.idx && fun[key][i] && item.children && item.children.length){ //判断是否有二层子节点
+              for(let key2 in fun[key][i]){
+                for(let k = 0; k < fun[key][i][key2].length; k++){
+                  (item.children || []).map((child)=> {
+                    if(this.getIdx(fun[key][i][key2][k]) === child.idx && fun[key][i][key2][k]) {
+                      if(child.children && child.children.length){//判断是否有三层子节点
+                        for(let key3 in fun[key][i][key2][k]){
+                          for(let j = 0; j < fun[key][i][key2][k][key3].length; j++) {
+                            (child.children || []).map((child2)=> {
+                              if( this.getIdx(fun[key][i][key2][k][key3][j]) === child2.idx ){
+                                child2.checked = true;
+                                selectedPaltformKeysCount++;
+                                platform.count++;
+                              }
+                            });
+                          }
+                        }
+                      }else{
+                        child.checked = true;
+                        selectedPaltformKeysCount++;
+                        platform.count++;
+                      }
+                    }
+                  });
+                }
+              }
+            }
+          });
+        }
+      }
+    });
+    this.setState({
+      selectedPaltformKeysCount:selectedPaltformKeysCount
+    });
+    return platform;
+  }
+
+  getIdx(obj){
+    for(var key in obj){
+      return key
     }
   }
 
@@ -74,7 +137,7 @@ class StepTwoComponent extends React.Component {
     let platforms = props.location.query.platforms.split(',');
 
     let platformsData = [{
-      idx: 'P001',
+      idx: 'P.a',
       name: 'Web网站',
       icon: '&#xe602;',
     }, {
@@ -110,24 +173,25 @@ class StepTwoComponent extends React.Component {
       }
     }
     selectedPlatformsData.push({
-      idx: 'P006',
+      idx: 'P.b',
       name: '管理后台',
       icon: ''
     });
+    platforms.push('P.b');
 
     this.setState({
-      loading: false,
       selectedPaltforms: platforms,
       defaultActiveKey: platforms[0] || platformsData[0].idx,
       platformsData,
       selectedPlatformsData
     }, ()=> {
-      this.loadData(this.state.selectedPaltforms[0]);
+      for(let i = 0; i < this.state.selectedPaltforms.length; i++){
+        this.loadData(this.state.selectedPaltforms[i]);
+      }
     });
   }
 
   clearAll(parent) {
-    // debugger;
     if (!parent || parent.length === 0) {
       return;
     }
@@ -140,6 +204,7 @@ class StepTwoComponent extends React.Component {
     return;
   }
 
+  //平台切换
   headerTabsChange(key) {
     this.setState({
       defaultActiveKey: key
@@ -172,7 +237,7 @@ class StepTwoComponent extends React.Component {
     }
   }
 
-
+  //得到选择的IDX值
   getValues(parent) {
     let values = parent.map((item)=> {
       let obj = {};
@@ -195,24 +260,52 @@ class StepTwoComponent extends React.Component {
   //提交计算结果
   submitCalculateResults() {
     let values = this.getValues(this.state.selectedPlatformsData);
+    SS.set(Config.platformsKeys,encodeURI(JSON.stringify(values)));
     if (SS.get(Config.token) === null) {
       MiniLogin.show(()=> {
-        this.props.history.push({
-          pathname: '/step-3/',
-          query: {platformsKeys: JSON.stringify(values)}
-        });
+        window.location.href = '#/step-3';
       });
       return;
     }
-    this.props.history.push({
-      pathname: '/step-3/',
-      query: {platformsKeys: JSON.stringify(values)}
-    });
+    window.location.href = '#/step-3';
   }
 
+  //onChange
+  handleFunctionItemChange(event,item,platform){
+    item.checked = event.target.checked;
+    let count = platform.count || 0;
+    let selectedPaltformKeysCount = this.state.selectedPaltformKeysCount;
+    if (event.target.checked) {
+      if(!!item.children && item.children.length > 0){
+        count += item.children.length;
+        selectedPaltformKeysCount += item.children.length;
+        item.children.map((x)=> {
+          x.checked = true;
+          return x;
+        });
+      }else{
+        count++;
+        selectedPaltformKeysCount++;
+      }
+    } else {
+      if(!!item.children && item.children.length > 0){
+        count -= item.children.length;
+        selectedPaltformKeysCount -= item.children.length;
+        item.children.map((x)=> {
+          x.checked = false;
+          return x;
+        });
+      }else{
+        count--;
+        selectedPaltformKeysCount--;
+        item.checked = false;
+      }
+    }
+    platform.count = count;
+    this.setState({platform, selectedPaltformKeysCount});
+  }
 
-  render() {
-
+ render() {
     //平台信息
     let paltformItem = (this.state.platformsData || []).map((item, index)=> {
       let check = this.state.selectedPaltforms.filter(idx => item.idx === idx).length != 0;
@@ -226,6 +319,14 @@ class StepTwoComponent extends React.Component {
             <input type="checkbox" id={item.idx + '-' + index} name="platform" checked={check} onChange={(event)=> {
               if (event.target.checked) {
                 let selectedPaltforms = this.state.selectedPaltforms;
+                if(item.idx != 'P.a'){
+                  Modal.info({
+                    title: '提示信息',
+                    content: '该平台未开放，敬请期待',
+                    onOk:()=> {}
+                  });
+                  return;
+                }
                 selectedPaltforms.push(item.idx);
                 this.setState({
                   selectedPaltforms
@@ -251,7 +352,6 @@ class StepTwoComponent extends React.Component {
         let children = (item.children || []).map((child, cindex)=> {
           if (child.children && child.children.length) {//判断是否有三层子节点
             let children2 = (child.children || []).map((child2, cindex2)=> {
-              let check = this.state.selectedItemTwoKeys.filter(idx => child.idx === idx).length != 0;
               return (<label key={child2.idx + '-' + cindex2} htmlFor={item.idx + '-' + child.idx + '-' + child2.idx}
                              className="function-label" onMouseEnter={(event)=> {
                 let e = event || window.event;
@@ -265,7 +365,7 @@ class StepTwoComponent extends React.Component {
                 }
                 let previewData = {
                   title: eval("'" + child.text + "'") + ' » ' + eval("'" + child2.text + "'"),
-                  desc: child2.detail,
+                  desc: eval("'"+child2.detail+"'"),
                   img: ''
                 }
                 this.setState({
@@ -278,69 +378,45 @@ class StepTwoComponent extends React.Component {
                 if (e.target.nodeName === 'SPAN') {
                   return;
                 }
-                let previewData = {
-                  title: '功能点描述',
-                  desc: '鼠标移动到对应的功能点上，此处会显示功能点说明',
-                  img: ''
-                }
                 this.setState({
-                  previewData
+                  previewData : {
+                    title: '功能点描述',
+                    desc: '鼠标移动到对应的功能点上，此处会显示功能点说明',
+                    img: ''
+                  }
                 });
-              }}><input type="checkbox"
-                        id={item.idx + '-' + child.idx + '-' + child2.idx}
-                        name={item.idx + '.' + child.idx + '.' + child2.idx}
-                        value="on"
-                        checked={child2.checked}
-                        onChange={(event)=> {
-                          child2.checked = event.target.checked;
-                          let count = platform.count || 0;
-                          let selectedPaltformKeysCount = this.state.selectedPaltformKeysCount;
-                          if (event.target.checked) {
-                            count++;
-                            selectedPaltformKeysCount++;
-                          } else {
-                            count--;
-                            selectedPaltformKeysCount--;
-                            child.checked = false;
-                          }
-                          platform.count = count;
-                          this.setState({platform, selectedPaltformKeysCount});
-                        }}/>
-                {eval("'" + child2.text + "'")}
+              }}>
+                <Checkbox id={item.idx + '-' + child.idx + '-' + child2.idx}
+                          name={item.idx + '.' + child.idx + '.' + child2.idx}
+                          checked={child2.checked}
+                          onChange={(event)=> {
+                            this.handleFunctionItemChange(event,child2,platform);
+                          }}>{eval("'" + child2.text + "'")}</Checkbox>
               </label>);
             });
 
             return (
               <tr className={cindex % 2 ? 'even' : 'odd'} key={child.idx + '-' + cindex}>
-                { cindex === 0 ? <td rowSpan={item.children.length}>{eval("'" + item.text + "'")}</td> : ''}
-                <td><label htmlFor={child.idx + '-' + cindex} className="module-label">
-                  <span>{eval("'" + child.text + "'")}</span>
-                  <input type="checkbox" id={child.idx + '-' + cindex} name={item.idx + '.' + child.idx} value='no'
-                         checked={child.checked || child.children.filter(x=>x.checked).length === child.children.length}
-                         onChange={(event)=> {
-                           child.checked = event.target.checked;
-                           let count = platform.count || 0;
-                           let selectedPaltformKeysCount = this.state.selectedPaltformKeysCount;
-                           if (event.target.checked) {
-                             count += child.children.length;
-                             selectedPaltformKeysCount += child.children.length;
-                             child.children.map((x)=> {
-                               x.checked = true;
-                               return x;
-                             });
-                           } else {
-                             count -= child.children.length;
-                             selectedPaltformKeysCount -= child.children.length;
-                             child.children.map((x)=> {
-                               x.checked = false;
-                               return x;
-                             });
-                           }
-                           platform.count = count;
-                           this.setState({platform,selectedPaltformKeysCount});
-                         }}/>
-                </label></td>
+                { cindex != 0 || <td rowSpan={item.children.length} data-idx={item.idx}>{eval("'" + item.text + "'")}</td>}
+                <td><Checkbox className='module-label' id={child.idx + '-' + cindex} name={item.idx + '.' + child.idx}
+                            checked={child.checked || child.children.filter(x=>x.checked).length === child.children.length}
+                            onChange={(event)=> {
+                              this.handleFunctionItemChange(event,child,platform);
+                            }}>{eval("'" + child.text + "'")}</Checkbox></td>
                 <td>{children2}</td>
+              </tr>
+            );
+          }else{
+            // 没有第三节点
+            return (
+              <tr className={cindex % 2 ? 'even' : 'odd'} key={child.idx + '-' + cindex}>
+                { cindex != 0 || <td rowSpan={item.children.length} data-idx={item.idx}>{eval("'" + item.text + "'")}</td>}
+                <td><Checkbox className='module-label' id={child.idx + '-' + cindex} name={item.idx + '.' + child.idx}
+                              checked={child.checked}
+                              onChange={(event)=> {
+                                this.handleFunctionItemChange(event,child,platform);
+                              }}>{eval("'" + child.text + "'")}</Checkbox></td>
+                <td></td>
               </tr>
             );
           }
@@ -349,9 +425,9 @@ class StepTwoComponent extends React.Component {
       } else {
         return (
           <tr className={index % 2 ? 'odd' : 'even'} key={index}>
-            <td rowSpan={item.children.length}>{eval("'" + item.text + "'")}</td>
-            <td>&nbsp;</td>
-            <td>&nbsp;</td>
+            <td rowSpan={item.children.length} data-idx={item.idx}>{eval("'" + item.text + "'")}</td>
+            <td></td>
+            <td></td>
           </tr>
         );
       }
@@ -364,47 +440,49 @@ class StepTwoComponent extends React.Component {
         <Tabs.TabPane tab={<Badge count={item.count || 0}><span className="tab-title">{item.name}</span></Badge>}
                       key={item.idx}>
           <div className="pane-body">
-            <div className="pane-body-wrapper">
-              <div className="functions">
-                <table>
-                  <thead>
-                  <tr>
-                    <th>分类</th>
-                    <th>模块</th>
-                    <th>功能点</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  {tbody}
-                  </tbody>
-                  <tfoot>
-                  <tr>
-                    <th colSpan="3">
-                      <Button type="ghost" onClick={()=> {
-                        this.clearAll(this.state.platformsData);
-                        this.setState({platformsData: this.state.platformsData});
-                      }}>一键清空</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      <Button type="primary" onClick={()=> {
-                        this.initData(this.props);
-                      }}>还原默认</Button>
-                    </th>
-                  </tr>
-                  </tfoot>
-                </table>
-              </div>
-              <div className="preview" style={{top: this.state.previewTop}}>
-                <div className="inner">
-                  <h2>{this.state.previewData.title}</h2>
-                  <article>
-                    <p>{this.state.previewData.desc}</p>
-                    <div className="preview-icon"
-                         style={{display: this.state.previewData.img === '' ? 'none' : 'block'}}>
-                      <img src="" alt=""/>
-                    </div>
-                  </article>
+            <Spin tip="数据加载中..." spinning={this.state.loading}>
+              <div className="pane-body-wrapper">
+                <div className="functions">
+                  <table>
+                    <thead>
+                    <tr>
+                      <th>分类</th>
+                      <th>模块</th>
+                      <th>功能点</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {tbody}
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                      <th colSpan="3">
+                        <Button type="ghost" onClick={()=> {
+                          this.clearAll(this.state.platformsData);
+                          this.setState({platformsData: this.state.platformsData,selectedPaltformKeysCount:0});
+                        }}>一键清空</Button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <Button type="primary" className='hide' onClick={()=> {
+                          this.initData(this.props);
+                        }}>还原默认</Button>
+                      </th>
+                    </tr>
+                    </tfoot>
+                  </table>
+                </div>
+                <div className="preview" style={{top: this.state.previewTop}}>
+                  <div className="inner">
+                    <h2>{this.state.previewData.title}</h2>
+                    <article>
+                      <p>{this.state.previewData.desc}</p>
+                      <div className="preview-icon"
+                           style={{display: this.state.previewData.img === '' ? 'none' : 'block'}}>
+                        <img src="" alt=""/>
+                      </div>
+                    </article>
+                  </div>
                 </div>
               </div>
-            </div>
+            </Spin>
           </div>
         </Tabs.TabPane>
       );
@@ -422,23 +500,23 @@ class StepTwoComponent extends React.Component {
             <li className="">
               <em>1</em>
               <span>
-                    <label>第一步，</label>
-                    <label>项目类型</label>
-                </span>
+                <label>第一步，</label>
+                <label>项目类型</label>
+              </span>
             </li>
             <li className="current">
               <em>2</em>
               <span>
-                    <label>第二步，</label>
-                    <label>功能评估</label>
-                </span>
+                <label>第二步，</label>
+                <label>功能评估</label>
+              </span>
             </li>
             <li className="">
               <em>3</em>
               <span>
-                    <label>第三步，</label>
-                    <label>评估结果</label>
-                </span>
+                <label>第三步，</label>
+                <label>评估结果</label>
+              </span>
             </li>
           </ul>
           <div className="wrapper">
@@ -447,12 +525,9 @@ class StepTwoComponent extends React.Component {
                 {paltformItem}
               </ul>
             </div>
-            <Spin spinning={this.state.loading}>
-              <Tabs tabBarExtraContent={operations} className='tabs' activeKey={defaultActiveKey}
-                    onChange={this.headerTabsChange.bind(this)}>
-                {tabPaneItem}
-              </Tabs>
-            </Spin>
+            <Tabs tabBarExtraContent={operations} className='tabs' activeKey={defaultActiveKey} onChange={this.headerTabsChange.bind(this)}>
+              {tabPaneItem}
+            </Tabs>
             <div className="calculate">
               <Button type="submit"
                       className={this.state.selectedPaltformKeysCount > 0 ? 'button primary' : 'button disabled'}

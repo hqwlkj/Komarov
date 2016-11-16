@@ -19,14 +19,13 @@ body, html {
   -webkit-font-smoothing: antialiased;
   min-width: 320px;
 }
-
 @font-face {
-  font-family: 'iconfont';
-  src: url('//at.alicdn.com/t/font_1477644174_356477.eot'); /* IE9*/
-  src: url('//at.alicdn.com/t/font_1477644174_356477.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-  url('//at.alicdn.com/t/font_1477644174_356477.woff') format('woff'), /* chrome、firefox */
-  url('//at.alicdn.com/t/font_1477644174_356477.ttf') format('truetype'), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
-  url('//at.alicdn.com/t/font_1477644174_356477.svg#iconfont') format('svg'); /* iOS 4.1- */
+  font-family: 'iconfont';  /* project id："162899" */
+  src: url('//at.alicdn.com/t/font_t2wzzvg38t3jif6r.eot');
+  src: url('//at.alicdn.com/t/font_t2wzzvg38t3jif6r.eot') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_t2wzzvg38t3jif6r.woff') format('woff'),
+  url('//at.alicdn.com/t/font_t2wzzvg38t3jif6r.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_t2wzzvg38t3jif6r.svg#iconfont') format('svg');
 }
 
 .iconfont {
@@ -87,6 +86,9 @@ input, textarea, keygen, select, button {
 input, textarea, keygen, select, button, meter, progress {
   -webkit-writing-mode: horizontal-tb;
 }
+div {
+  display: block;
+}
 
 .fl {
   float: left;
@@ -120,7 +122,61 @@ input, textarea, keygen, select, button, meter, progress {
   background: #f0f2f5;
   > .content-wrapper {
     padding-top: 64px;
-    padding-bottom: 1rem;
+    padding-bottom: 20rem;
     min-height: 600px;
+  }
+}
+.flex-box {
+  display: -ms-flexbox;
+  display: flex
+}
+.flex-none {
+  -ms-flex: none;
+  flex: none
+}
+.flex-auto-justify {
+  -ms-flex: 1;
+  flex: 1
+}
+.flex-direction-row {
+  -ms-box-orient: vertical;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -ms-flex-line-pack: stretch
+}
+.flex-direction-column,.flex-direction-row {
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+  align-content: stretch
+}
+
+.flex-direction-column {
+  -ms-box-orient: horizontal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -ms-flex-line-pack: stretch;
+}
+
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ant-spin{
+  width: 100%;
+  min-height: 100px;
+  .ant-spin-dot{
+    margin: 15px auto;
+  }
+  .ant-spin-text{  }
+}
+//ant-notification  通知样式修改
+.ant-notification{
+  .ant-notification-notice-message{
+    font-size: 16px;
+    line-height: 32px;
   }
 }

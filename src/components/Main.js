@@ -11,7 +11,6 @@ import SideBar from './SideBarComponent';
 
 
 import Config from 'config';
-let yeomanImage = require('../images/yeoman.png');
 
 class AppComponent extends React.Component {
   constructor(props) {

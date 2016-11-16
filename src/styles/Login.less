@@ -11,7 +11,7 @@
     padding-bottom: 5rem;
     .account-box-wrapper{
       margin-top: 98px;
-      margin-bottom: 98px;
+      margin-bottom: 15rem;
       position: relative;
       .account-box{
         position: relative;
@@ -65,43 +65,62 @@
           margin-top: 30px;
           margin-left: 35px;
           position: relative;
-          input[type=checkbox] {
-            display: none;
-            &:checked+label:after {
-              position: absolute;
-              width: 10px;
-              opacity: 1;
+          .ant-checkbox-wrapper{
+            .ant-checkbox{
+              .ant-checkbox-inner{
+                cursor: pointer;
+                width: 20px;
+                height: 20px;
+                &:after{
+                  left: 5px;
+                  width: 8px;
+                  height: 13px;
+                }
+              }
+              & + span{
+                vertical-align: middle;
+                font-size: 14px;
+                color: #8796a8;
+              }
             }
           }
-          label {
-            border: 1px solid #cad3de;
-            cursor: pointer;
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            top: 0;
-            border-radius: 3px;
-            background: #FFF;
-            &:after {
-              opacity: 0;
-              content: '';
-              height: 7px;
-              background: 0 0;
-              top: 4px;
-              left: 5px;
-              border: 3px solid #333;
-              border-top: none;
-              border-right: none;
-              -webkit-transform: rotate(-45deg);
-              transform: rotate(-45deg);
-            }
-          }
-          span {
-            position: relative;
-            left: 30px;
-            font-size: 14px;
-            color: #8796a8;
-          }
+          //input[type=checkbox] {
+          //  display: none;
+          //  &:checked+label:after {
+          //    position: absolute;
+          //    width: 10px;
+          //    opacity: 1;
+          //  }
+          //}
+          //label {
+          //  border: 1px solid #cad3de;
+          //  cursor: pointer;
+          //  position: absolute;
+          //  width: 20px;
+          //  height: 20px;
+          //  top: 0;
+          //  border-radius: 3px;
+          //  background: #FFF;
+          //  &:after {
+          //    opacity: 0;
+          //    content: '';
+          //    height: 7px;
+          //    background: 0 0;
+          //    top: 4px;
+          //    left: 5px;
+          //    border: 3px solid #333;
+          //    border-top: none;
+          //    border-right: none;
+          //    -webkit-transform: rotate(-45deg);
+          //    transform: rotate(-45deg);
+          //  }
+          //}
+          //span {
+          //  position: relative;
+          //  left: 30px;
+          //  font-size: 14px;
+          //  color: #8796a8;
+          //}
           a {
             float: right;
             margin-right: 35px;

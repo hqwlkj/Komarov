@@ -2,7 +2,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Button, Form, Row, Col, Icon} from 'antd';
+import {Button, Form, Row, Col, Icon, Input} from 'antd';
 import Console from '../Console';
 import Config from 'config';
 import request from '../Request';
@@ -112,10 +112,10 @@ class MiniLoginComponent extends React.Component {
                   <i className="iconfont">&#xe609;</i>
                   {getFieldDecorator('username', {
                     rules: [
-                      { required: true, pattern: new RegExp(Config.validateRegExp.tel), message: '请输入正确的手机号码', type: 'string'},
+                      { required: true, message: '请输入正确的手机号码', type: 'string'},
                     ],
                   })(
-                    <input id="username" name="username" type="text" placeholder="手机号码" autoComplete="off" />
+                    <Input id="username" name="username" type="text" placeholder="手机号码" autoComplete="off" />
                   )}
                 </div>
                 <div className="item password">
@@ -125,7 +125,7 @@ class MiniLoginComponent extends React.Component {
                       { required: true,  pattern: /\S{6,18}/, message: "密码长度为6~18位",type: 'string'},
                     ],
                   })(
-                    <input id="password" name="password" type="password" placeholder="密码" autoComplete="off"/>
+                    <Input id="password" name="password" type="password" placeholder="密码" autoComplete="off"/>
                   )}
                 </div>
                 <div className="item">
@@ -133,7 +133,7 @@ class MiniLoginComponent extends React.Component {
                     this.handleLoginSubmit()
                   }}>登录</Button>
                 </div>
-                <div className="item login-links">
+                <div className="item login-links hide">
                   <a href="#/register">免费注册</a>
                 </div>
               </div>

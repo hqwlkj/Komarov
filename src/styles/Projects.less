@@ -1,0 +1,134 @@
+@import "base";
+
+.projects-component {
+  height: 100%;
+  max-width: 980px;
+  margin: auto;
+  *{
+    outline: none;
+    box-sizing: border-box;
+  }
+  .content{
+    position: relative;
+    height: 100%;
+    max-width: 980px;
+    margin: auto;
+    .breadcrumb-wrapper{
+      padding-top: 30px;
+      padding-bottom: 20px;
+      line-height: 17px;
+      .ant-breadcrumb-link{
+        font-size: 1rem;
+        color: @primary-color;
+      }
+    }
+    .projects-wrapper{
+      .quotes{
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        li {
+          width: 100%;
+          line-height: 2.5rem;
+          box-sizing: border-box;
+          margin: 1.5rem 0;
+          box-shadow: 0 .1rem .2rem rgba(0,0,0,.2);
+          border-radius: 5px;
+          .platforms{
+            width: 40%;
+            overflow: hidden;
+            padding: 1rem;
+            background-color: #596169;
+            box-sizing: border-box;
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+            .icons{
+              height: 100%;
+              width: 100%;
+              display: table;
+              .icon-wrapper{
+                display: table-cell;
+                text-align: center;
+                vertical-align: middle;
+                .iconfont{
+                  color: #ffffff;
+                  width: 6rem;
+                  height: 6rem;
+                  font-size: 4.5rem;
+                  margin:1rem;
+                }
+              }
+            }
+          }
+          .detail{
+            width: 60%;
+            background: #fff;
+            padding: 2rem 3.1rem;
+            box-sizing: border-box;
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+            h1 {
+              font-size: 2.5rem;
+              line-height: 3.5rem;
+              margin: 0;
+              color: #2d3238;
+            }
+            p {
+              margin: .2rem 0 0;
+              font-size: 1rem;
+              line-height: 1.4rem;
+              color: #979fa8;
+            }
+            .info{
+              margin: 2rem 0 1.5rem;
+              padding: 1rem 0;
+              border-top: 1px solid #979fa8;
+              border-bottom: 1px solid #979fa8;
+              .counts,.time{
+                font-size: 1rem;
+                color: #2d3238;
+                line-height: 1.4rem;
+                margin: .5rem 0;
+                em{
+                  margin-right: .5rem;
+                  font-size: 1.5rem;
+                  font-style: normal;
+                  color:@primary-color;
+                }
+              }
+              .time{
+                em{
+                  font-size: 1rem;
+                }
+              }
+            }
+            .opera-buttons{
+              .ant-btn{
+                float: left;
+                margin-right: 1rem;
+                &:last-child{
+                  display: none;
+                  float: right;
+                  margin-right: 0;
+                  border-color:#E61E0B;
+                  color: #E61E0B;
+                }
+              }
+            }
+          }
+          &:hover{
+            .detail{
+              .opera-buttons{
+                .ant-btn {
+                  &:last-child{
+                    display: block;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

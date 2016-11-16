@@ -36,6 +36,19 @@ class PwdSettingComponent extends React.Component {
                 </li>
               </ul>
             </div>
+            <div className="side-nav mpay-menu">
+              <ul className="clearfix">
+                <li className="side-nav-header border-radius-top">
+                  <span className="subtitle">项目管理</span>
+                </li>
+                <li className="side-nav-item">
+                  <a href="#/user/projects" className="nav-link">
+                    <i className="iconfont">&#xe65e;</i>
+                    <span>我的项目</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
           </div>
           <div className="form-container">
             <div className="form-box">

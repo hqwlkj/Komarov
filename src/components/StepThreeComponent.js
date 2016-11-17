@@ -54,7 +54,6 @@ class StepThreeComponent extends React.Component {
       selectedPaltforms
     }, () => {
       this.loadInitData();
-      SS.remove(Config.platformsKeys);//删除缓存中的 IDEXTREE
     });
   }
 
@@ -125,6 +124,14 @@ class StepThreeComponent extends React.Component {
       MiniLogin.show(() => {
       });
       return;
+    }
+    debugger;
+    let project = SS.getObj(Config.project);
+    let idxtree = SS.get(Config.platformsKeys);
+    if(!idxtree && !!project){
+      idxtree = JSON.stringify(project.idxtree);
+    }else{
+      idxtree = decodeURI(idxtree);
     }
     let elem_form = document.querySelector('.export-form');
     if (!elem_form) {
@@ -201,7 +208,7 @@ class StepThreeComponent extends React.Component {
           visibleResultWrapper: true
         });
         SS.remove(Config.project);
-        SS.remove(Config.platformsKeys);
+        SS.remove(Config.platformsKeys);//删除缓存中的 IDEXTREE
       },
       error: (data) => {
         message.error(data.messages);
@@ -349,6 +356,7 @@ class StepThreeComponent extends React.Component {
                     let project = {};
                     project.idxtree = JSON.parse(this.state.selectedPaltforms);
                     SS.setObj(Config.project, project);
+                    SS.remove(Config.platformsKeys);//删除缓存中的 IDEXTREE
                     this.props.history.go(-1);
                   }}>调整需求重新计算</Button>
                 </div>

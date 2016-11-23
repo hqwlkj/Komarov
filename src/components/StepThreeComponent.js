@@ -16,7 +16,7 @@ class StepThreeComponent extends React.Component {
     this.state = {
       loading: false,
       downloadLoading: false,
-      visible: false,
+      visible: true,
       visibleResultWrapper: false,
       visibleSaveFun: false,
       platformsData: [],
@@ -36,11 +36,11 @@ class StepThreeComponent extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('componentWillReceiveProps');
+    //console.log('componentWillReceiveProps');
   }
 
   componentWillMount() {
-    console.log('componentWillMount');
+    //console.log('componentWillMount');
     let project = SS.getObj(Config.project);
     if(!!project){
       this.props.form.setFieldsValue({'objectId':project.objectId,'project_name':project.project_name,'project_desc':project.project_desc});
@@ -54,6 +54,7 @@ class StepThreeComponent extends React.Component {
       selectedPaltforms
     }, () => {
       this.loadInitData();
+      this.loadData();
     });
   }
 
@@ -195,10 +196,8 @@ class StepThreeComponent extends React.Component {
   }
 
   saveFunctionInfo(values) {
-    debugger;
     values.idxtree = JSON.parse(this.state.selectedPaltforms);
     values.objectId = values.objectId === undefined ? 0 : values.objectId;
-    console.log('values', values);
     request({
       type: 'post',
       url: Config.host + '/project/save',
@@ -320,20 +319,13 @@ class StepThreeComponent extends React.Component {
               <em>1</em>
               <span>
                 <label>第一步，</label>
-                <label>项目类型</label>
-              </span>
-            </li>
-            <li className="">
-              <em>2</em>
-              <span>
-                <label>第二步，</label>
                 <label>功能评估</label>
               </span>
             </li>
             <li className="current">
-              <em>3</em>
+              <em>2</em>
               <span>
-                <label>第三步，</label>
+                <label>第二步，</label>
                 <label>评估结果</label>
               </span>
             </li>
@@ -346,14 +338,14 @@ class StepThreeComponent extends React.Component {
                   <em>平台数量：<span>{platformNum}</span>个</em>
                   <em>功能模块：<span>{functionNum}</span>个</em>
                   <div className="detail">
-                    <Button className='see-fun-list-btn' htmlType='button' onClick={() => {
-                      this.seeFunctionList()
-                    }}>{this.state.visible ? '隐藏功能清单' : '查看功能清单'}</Button>
+                    {/*<Button className='see-fun-list-btn' htmlType='button' onClick={() => {*/}
+                      {/*this.seeFunctionList()*/}
+                    {/*}}>{this.state.visible ? '隐藏功能清单' : '查看功能清单'}</Button>*/}
                   </div>
                 </div>
                 <div className="right">
                   <Button className="adjust-btn" htmlType='button' onClick={() => {
-                    let project = {};
+                    let project = SS.getObj(Config.project) || {};
                     project.idxtree = JSON.parse(this.state.selectedPaltforms);
                     SS.setObj(Config.project, project);
                     SS.remove(Config.platformsKeys);//删除缓存中的 IDEXTREE
@@ -418,6 +410,11 @@ class StepThreeComponent extends React.Component {
                     <Input name='project_desc' type='textarea' rows="6" placeholder='填写项目描述' autoComplete='off'/>
                   )}
                 </div>
+
+                <Button className='modal-button' htmlType='button' onClick={() => {
+                  this.handleSaveFunctionList()
+                }}><span>另存为新项目</span>
+                </Button>
                 <Button className='modal-button' htmlType='button' onClick={() => {
                   this.handleSaveFunctionList()
                 }}><span>确认保存</span>

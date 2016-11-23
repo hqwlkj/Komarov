@@ -67,7 +67,7 @@ class ViewComponent extends React.Component {
     // project.id = id;
     // project.name = '我是项目的标题'+(id+1);
     // project.desc = '我是项目的描述信息'+(id+1);
-    // project.createTime = new Date().getTime();
+    // project.updateTime = new Date().getTime();
     // project.platformNum = parseInt(Math.random() * 99);
     // project.functionNum = parseInt(Math.random() * 9999);
     // project.idxtree = '[{"P.a":[{"2.a":[{"2.3.a":[{"2.3.1.a":""},{"2.3.2.a":""}]},{"2.4.a":[{"2.4.1.a":""},{"2.4.2.a":""},{"2.4.3.a":""}]},{"2.5.a":[{"2.5.1.a":""},{"2.5.2.a":""},{"2.5.3.a":""}]},{"2.6.a":[{"2.6.1.a":""},{"2.6.3.a":""},{"2.6.4.a":""}]}]}]},{"P.b":[{"8.b":[{"8.3.b":[{"8.3.1.b":""},{"8.3.3.b":""}]}]},{"9.b":[{"9.1.b":[{"9.1.2.b":""}]}]}]}]';
@@ -194,7 +194,7 @@ class ViewComponent extends React.Component {
                   <div className="counts">平台数量：<em>{this.state.projectData.platformNum}</em>个</div>
                   <div className="counts">功能模块：<em>{this.state.projectData.functionNum}</em>个</div>
                   <div className="time">
-                    创建时间：<em>{dateFormat('yyyy-MM-dd hh:mm:ss', new Date(this.state.projectData.createTime))}</em></div>
+                    创建时间：<em>{!this.state.projectData.createTime || dateFormat('yyyy-MM-dd hh:mm:ss', new Date(this.state.projectData.createTime))}</em></div>
                 </div>
               </div>
               <div className="item-main">

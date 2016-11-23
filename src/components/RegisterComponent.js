@@ -17,7 +17,7 @@ class RegisterComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      visibleSuccess: true,
+      visibleSuccess: false,
       errorMap: {},
       verifycodeTime:0
     };

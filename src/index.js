@@ -46,7 +46,8 @@ class App extends React.Component {
         <Route path='/resetPassword' component={ResetPassword}/>
         <Route path='/projects/view/:hash' component={View} breadcrumbName='预览清单'/>
         <Route path='/' component={Main} breadcrumbName='首页'>
-          <IndexRoute component={StepOne}/>
+          {/*<IndexRoute component={StepOne}/>*/}
+          <IndexRoute component={StepTwo}/>
           <Route path='/step-2' component={StepTwo} breadcrumbName='第二步'/>
           <Route path='/step-3' component={StepThree} breadcrumbName='第三步'/>
           <Route path='/user/center' component={UserCenter} breadcrumbName='个人信息'/>

@@ -12,22 +12,37 @@ require('styles//Header.less');
 let logo = require('../images/loading.png');
 
 class HeaderComponent extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
     this.state = {
       isLogin: false,
       msgCount: 0,
       msgData: [],
-      userData:{}
+      userData: {}
     }
     this.initUi = this.initUi.bind(this);
     this.loadData = this.loadData.bind(this);
     this.loginOut = this.loginOut.bind(this);
+    this.interval = setInterval(()=> {
+      if (!SS.get(Config.token)) {
+        return;
+      }
+      this.initUi();
+      clearInterval(this.interval);
+    }, 1000);
   }
 
   componentWillMount() {
     this.initUi();
   }
+
+  componentDidMount() {
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
 
   initUi() {
     if (SS.get(Config.token) == null) {
@@ -45,16 +60,16 @@ class HeaderComponent extends React.Component {
 
   loadData() {
     request({
-      type:'get',
-      url:Config.host + '/people/info',
-      data:{},
-      success:(data)=>{
-        if(data.code === 1 ){
+      type: 'get',
+      url: Config.host + '/people/info',
+      data: {},
+      success: (data) => {
+        if (data.code === 1) {
           location.href = '#/login';
           return;
         }
         this.setState({
-          userData:data
+          userData: data
         });
       }
     });
@@ -73,6 +88,11 @@ class HeaderComponent extends React.Component {
       }
     });
   }
+
+  refHeaderData() {
+    this.initUi();
+  }
+
   render() {
 
     return (
@@ -97,25 +117,28 @@ class HeaderComponent extends React.Component {
               <div className={this.state.isLogin ? 'user-avatar' : 'hide user-avatar'}>
                 <div className='nav-user'>
                   <Dropdown
-                    getPopupContainer={()=>document.querySelector('.nav-user')}
+                    getPopupContainer={() => document.querySelector('.nav-user')}
                     overlay={(
                       <Menu className='nav-dropdown-menu'>
                         <Menu.Item className="nav-dropdown-menu-item">
                           <span>欢迎您,</span>
                           <span>{this.state.userData === null ? '我是默认的' : this.state.userData.username}</span>
                         </Menu.Item>
-                        <Menu.Item className="hide"><a href='#/user/center'><i className="iconfont">&#xe611;</i>&nbsp;&nbsp;个人中心</a></Menu.Item>
-                        <Menu.Item><a href='#/user/projects'><i className="iconfont">&#xe65e;</i>&nbsp;&nbsp;我的项目</a></Menu.Item>
-                        <Menu.Item className="hide"><a href='#/password/setting'><i className="iconfont">&#xe612;</i>&nbsp;&nbsp;修改密码</a></Menu.Item>
+                        <Menu.Item className="hide"><a href='#/user/center'><i
+                          className="iconfont">&#xe611;</i>&nbsp;&nbsp;个人中心</a></Menu.Item>
+                        <Menu.Item><a href='#/user/projects'><i className="iconfont">&#xe65e;</i>&nbsp;&nbsp;
+                          我的项目</a></Menu.Item>
+                        <Menu.Item className="hide"><a href='#/password/setting'><i
+                          className="iconfont">&#xe612;</i>&nbsp;&nbsp;修改密码</a></Menu.Item>
                         <Menu.Divider />
-                        <Menu.Item><a target='_blank' onClick={()=> {
+                        <Menu.Item><a target='_blank' onClick={() => {
                           this.loginOut()
                         }}><i className="iconfont">&#xe610;</i>&nbsp;&nbsp;安全退出</a></Menu.Item>
                       </Menu>
                     )}>
                     <span className='ant-dropdown-link'>
                       <a href="javascript:void(0);" className="avatar-link" target="_self">
-                        <img src="https://gitlab.com/uploads/user/avatar/711661/avatar.png" height="40px" />
+                        <img src="https://gitlab.com/uploads/user/avatar/711661/avatar.png" height="40px"/>
                       </a>
                       <i className="iconfont">&#xe60f;</i>
                     </span>

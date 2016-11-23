@@ -3,7 +3,7 @@
 import React from 'react';
 import {Icon, Button, Form, Radio, Rate, Input, Modal} from 'antd';
 import Config from 'config';
-import Console from  '../Console';
+import $ from  'jquery';
 import request from '../Request';
 
 require('styles//SideBar.less');

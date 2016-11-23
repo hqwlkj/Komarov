@@ -19,13 +19,14 @@ body, html {
   -webkit-font-smoothing: antialiased;
   min-width: 320px;
 }
+
 @font-face {
   font-family: 'iconfont';  /* project id："162899" */
-  src: url('//at.alicdn.com/t/font_t2wzzvg38t3jif6r.eot');
-  src: url('//at.alicdn.com/t/font_t2wzzvg38t3jif6r.eot') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_t2wzzvg38t3jif6r.woff') format('woff'),
-  url('//at.alicdn.com/t/font_t2wzzvg38t3jif6r.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_t2wzzvg38t3jif6r.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_0sw67pd2j26pf1or.eot');
+  src: url('//at.alicdn.com/t/font_0sw67pd2j26pf1or.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_0sw67pd2j26pf1or.woff') format('woff'),
+  url('//at.alicdn.com/t/font_0sw67pd2j26pf1or.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_0sw67pd2j26pf1or.svg#iconfont') format('svg');
 }
 
 .iconfont {
@@ -178,5 +179,78 @@ div {
   .ant-notification-notice-message{
     font-size: 16px;
     line-height: 32px;
+  }
+}
+
+
+@keyframes myfirst {
+  from {
+    transform: rotate(0);
+    -ms-transform: rotate(0);
+    -webkit-transform: rotate(0);
+    -o-transform: rotate(0);
+    -moz-transform: rotate(0)
+  }
+
+  to {
+    transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    -moz-transform: rotate(360deg)
+  }
+}
+
+@-moz-keyframes myfirst {
+  from {
+    transform: rotate(0);
+    -ms-transform: rotate(0);
+    -webkit-transform: rotate(0);
+    -o-transform: rotate(0);
+    -moz-transform: rotate(0)
+  }
+
+  to {
+    transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    -moz-transform: rotate(360deg)
+  }
+}
+
+@-webkit-keyframes myfirst {
+  from {
+    transform: rotate(0);
+    -ms-transform: rotate(0);
+    -webkit-transform: rotate(0);
+    -o-transform: rotate(0);
+    -moz-transform: rotate(0)
+  }
+
+  to {
+    transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    -moz-transform: rotate(360deg)
+  }
+}
+
+@-o-keyframes myfirst {
+  from {
+    transform: rotate(0);
+    -ms-transform: rotate(0);
+    -webkit-transform: rotate(0);
+    -o-transform: rotate(0);
+    -moz-transform: rotate(0)
+  }
+
+  to {
+    transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -webkit-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    -moz-transform: rotate(360deg)
   }
 }

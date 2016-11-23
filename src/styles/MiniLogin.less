@@ -102,12 +102,15 @@
               font-size: 18px;
               top: 50%;
               transform: translateY(-50%);
+              //z-index: 9; //使用图标将此处打开
             }
-            .iconfont:last-child, .anticon:last-child {
-              left: inherit;
-              font-size: 14px;
-              right: 15px;
-              cursor: pointer;
+            .iconfont, .anticon{
+              &:last-child{
+                left: inherit;
+                font-size: 14px;
+                right: 15px;
+                cursor: pointer;
+              }
             }
             input {
             }
@@ -118,7 +121,8 @@
                 background: #edf1f5;
                 border: 1px solid #cad3de;
                 border-radius: 5px;
-                padding: 0 38px;
+                padding: 0 20px;
+                //padding: 0 38px; //不使用图标
                 font-size: 14px;
                 color: #2D3238;
               }

@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import {Tabs, Button, Badge, Spin, Tooltip, message, Modal, Form, Input} from 'antd';
+import {Tabs, Button, Badge, Spin, Tooltip, message, Modal, Form, Input, Row, Col} from 'antd';
 import MiniLogin from './MiniLoginComponent';
 import SS from 'parsec-ss';
 import classnames from 'classnames';
@@ -410,15 +410,31 @@ class StepThreeComponent extends React.Component {
                     <Input name='project_desc' type='textarea' rows="6" placeholder='填写项目描述' autoComplete='off'/>
                   )}
                 </div>
+                {
+                  SS.getObj(Config.project) && SS.getObj(Config.project).objectId != undefined
+                  ?
+                    <Row gutter={6}>
+                      <Col span={12}><Button className='modal-button' htmlType='button' onClick={() => {
+                        let project = SS.getObj(Config.project);
+                        if(!!project){
+                          this.props.form.setFieldsValue({'objectId':0});
+                        }
+                        this.handleSaveFunctionList()
+                      }}><span>另存为新项目</span>
+                      </Button></Col>
+                      <Col span={12}>
+                        <Button className='modal-button primary' htmlType='button' onClick={() => {
+                          this.handleSaveFunctionList()
+                        }}><span>保存修改</span>
+                        </Button>
+                      </Col>
+                    </Row> :
+                    <Button className='modal-button primary' htmlType='button' onClick={() => {
+                      this.handleSaveFunctionList()
+                    }}><span>确认保存</span>
+                    </Button>
+                }
 
-                <Button className='modal-button' htmlType='button' onClick={() => {
-                  this.handleSaveFunctionList()
-                }}><span>另存为新项目</span>
-                </Button>
-                <Button className='modal-button' htmlType='button' onClick={() => {
-                  this.handleSaveFunctionList()
-                }}><span>确认保存</span>
-                </Button>
               </div>
             </Form>
           </Modal>

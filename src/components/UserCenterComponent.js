@@ -4,8 +4,6 @@ import React from 'react';
 import {Breadcrumb, Button, Form, Input, Modal, Row, Col, Upload, message, Icon} from 'antd';
 import Console from '../Console';
 import Config from 'config';
-import request from '../Request';
-import SS from  'parsec-ss';
 
 require('styles//UserCenter.less');
 
@@ -43,6 +41,7 @@ class UserCenterComponent extends React.Component {
     if (this.xhr && this.xhr.abort) {
       this.xhr.abort();
     }
+    this.props = nextProps;
   }
 
   componentWillUnmount() {
@@ -53,12 +52,12 @@ class UserCenterComponent extends React.Component {
   }
 
   handleUserSettingOk() {
-    this.props.form.validateFieldsAndScroll((errors, values) => {
+    this.props.form.validateFieldsAndScroll((errors) => {
       if (!!errors) {
         let settingErrorMap = {};
         for (let key in errors) {
           Console.log(errors);
-          settingErrorMap[key] = errors[key]["errors"][0]["message"];
+          settingErrorMap[key] = errors[key]['errors'][0]['message'];
         }
         this.setState({
           settingErrorMap
@@ -112,7 +111,7 @@ class UserCenterComponent extends React.Component {
       if (this.state.verifycodeTime > 0) {
         return;
       }
-      this.props.form.validateFields((errors, values) => {
+      this.props.form.validateFields((errors) => {
         errors = errors['phone'];
         Console.log(errors);
         if (!!errors) {
@@ -210,14 +209,14 @@ class UserCenterComponent extends React.Component {
       action: '/upload.do',
       onChange(info) {
         if (info.file.status !== 'uploading') {
-          console.log(info.file, info.fileList);
+          Console.log(info.file, info.fileList);
         }
         if (info.file.status === 'done') {
           message.success(`${info.file.name} file uploaded successfully.`);
         } else if (info.file.status === 'error') {
           message.error(`${info.file.name} file upload failed.`);
         }
-      },
+      }
     }
 
     return (
@@ -249,14 +248,14 @@ class UserCenterComponent extends React.Component {
                 </li>
               </ul>
             </div>
-            <div className="side-nav mpay-menu">
-              <ul className="clearfix">
-                <li className="side-nav-header border-radius-top">
-                  <span className="subtitle">项目管理</span>
+            <div className='side-nav mpay-menu'>
+              <ul className='clearfix'>
+                <li className='side-nav-header border-radius-top'>
+                  <span className='subtitle'>项目管理</span>
                 </li>
-                <li className="side-nav-item">
-                  <a href="#/user/projects" className="nav-link">
-                    <i className="iconfont">&#xe65e;</i>
+                <li className='side-nav-item'>
+                  <a href='#/user/projects' className='nav-link'>
+                    <i className='iconfont'>&#xe65e;</i>
                     <span>我的项目</span>
                   </a>
                 </li>
@@ -347,16 +346,16 @@ class UserCenterComponent extends React.Component {
         >
           <Row>
             <Col span={5}>
-              <a href="javascript:void(0);" onClick={()=> {
+              <a href='javascript:void(0);' onClick={()=> {
                 this.showUserHeaderModal()
               }}>
-                <div className="avatar">
-                  <i className="iconfont">&#xe614;</i>
+                <div className='avatar'>
+                  <i className='iconfont'>&#xe614;</i>
                   <img src='https://gitlab.com/uploads/user/avatar/711661/avatar.png' alt='' height='128px'
                        width='128px'/>
                 </div>
               </a>
-              <div className="upload-user-header-btn">
+              <div className='upload-user-header-btn'>
                 <Button type='primary' size='small' onClick={()=> {
                   this.showUserHeaderModal()
                 }}>上传头像</Button>
@@ -368,10 +367,10 @@ class UserCenterComponent extends React.Component {
                   <div className='account-input-area'>
                     {getFieldDecorator('global_key', {
                       rules: [
-                        { required: true, message: '个性后缀至少为3位字符', min:3, type: 'string'},
-                      ],
+                        { required: true, message: '个性后缀至少为3位字符', min:3, type: 'string'}
+                      ]
                     })(
-                      <input name='global_key' type='text' disabled placeholder='用户名 (即个性后缀，注册后无法修改)' autoComplete="off"/>
+                      <input name='global_key' type='text' disabled placeholder='用户名 (即个性后缀，注册后无法修改)' autoComplete='off'/>
                     )}
                     {!this.state.settingErrorMap.global_key ||
                       <div className='format-error-label' name='gk_format_error'>
@@ -406,10 +405,10 @@ class UserCenterComponent extends React.Component {
                   <div className='account-input-area'>
                     {getFieldDecorator('verification_code', {
                       rules: [
-                        { required: true, message: "请输入正确的手机验证码", type: 'number'},
-                      ],
+                        { required: true, message: '请输入正确的手机验证码', type: 'number'}
+                      ]
                     })(
-                      <input name='verification_code' type='number' placeholder='手机验证码' autoComplete="off"/>
+                      <input name='verification_code' type='number' placeholder='手机验证码' autoComplete='off'/>
                     )}
                     {!this.state.settingErrorMap.verification_code ||
                     <div className='format-error-label' name='verification_code_format_error'>
@@ -421,10 +420,10 @@ class UserCenterComponent extends React.Component {
                   <div className='account-input-area'>
                     {getFieldDecorator('email', {
                       rules: [
-                        { required: true,  pattern: new RegExp(Config.validateRegExp.email), message: "请输入正确的邮箱地址", type: 'email'},
-                      ],
+                        { required: true,  pattern: new RegExp(Config.validateRegExp.email), message: '请输入正确的邮箱地址', type: 'email'}
+                      ]
                     })(
-                      <input name='email' type='email' placeholder='邮箱地址' autoComplete="off" />
+                      <input name='email' type='email' placeholder='邮箱地址' autoComplete='off' />
                     )}
                     {!this.state.settingErrorMap.email ||
                     <div className='format-error-label' name='password_format_error'>
@@ -441,7 +440,7 @@ class UserCenterComponent extends React.Component {
         {/*上传头像*/}
         <Modal title='上传头像'
                visible={this.state.visibleUserHeader}
-               wrapClassName="user-header-setting"
+               wrapClassName='user-header-setting'
                onOk={()=> {
                  this.handleUserHeaderOk()
                }} onCancel={()=> {
@@ -450,11 +449,11 @@ class UserCenterComponent extends React.Component {
         >
           <div style={{ height: 180 }}>
             <Upload.Dragger {...props}>
-              <p className="ant-upload-drag-icon">
-                <Icon type="inbox" />
+              <p className='ant-upload-drag-icon'>
+                <Icon type='inbox' />
               </p>
-              <p className="ant-upload-text">点击或将图片拖拽至此上传！</p>
-              <p className="ant-upload-hint">支持JPG格式，图片大小不超过5MB,请保证图片质量，分辨率至少为200*200</p>
+              <p className='ant-upload-text'>点击或将图片拖拽至此上传！</p>
+              <p className='ant-upload-hint'>支持JPG格式，图片大小不超过5MB,请保证图片质量，分辨率至少为200*200</p>
             </Upload.Dragger>
           </div>
         </Modal>

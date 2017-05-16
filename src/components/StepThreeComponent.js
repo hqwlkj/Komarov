@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import {Tabs, Button, Badge, Spin, Tooltip, message, Modal, Form, Input, Row, Col} from 'antd';
+import { Button, Spin, message, Modal, Form, Input, Row, Col} from 'antd';
 import MiniLogin from './MiniLoginComponent';
 import SS from 'parsec-ss';
 import classnames from 'classnames';
@@ -36,6 +36,7 @@ class StepThreeComponent extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    this.props = nextProps;
     //console.log('componentWillReceiveProps');
   }
 
@@ -76,7 +77,7 @@ class StepThreeComponent extends React.Component {
   loadData() {
     this.setState({
       loading: true,
-      platformsData: [],
+      platformsData: []
     });
     request({
       type: 'post',
@@ -101,7 +102,7 @@ class StepThreeComponent extends React.Component {
     } else {
       this.setState({
         visible: false,
-        platformsData: [],
+        platformsData: []
       });
     }
   }
@@ -121,9 +122,9 @@ class StepThreeComponent extends React.Component {
 
   //下载功能报表
   downloadTheReport() {
-    if (SS.get(Config.token) === null) {
-      MiniLogin.show(() => {
-      });
+    if (SS.get(Config.token) === null) {MiniLogin.show(() => {
+    });
+
       return;
     }
     debugger;
@@ -155,11 +156,11 @@ class StepThreeComponent extends React.Component {
     elem_form.appendChild(elem_input);
 
     this.setState({
-      downloadLoading: true,
+      downloadLoading: true
     }, () => {
       elem_form.submit();
       this.setState({
-        downloadLoading: false,
+        downloadLoading: false
       });
     });
   }
@@ -202,7 +203,7 @@ class StepThreeComponent extends React.Component {
       type: 'post',
       url: Config.host + '/project/save',
       data: values,
-      success: (data) => {
+      success: () => {
         this.setState({
           visibleResultWrapper: true
         });
@@ -221,9 +222,9 @@ class StepThreeComponent extends React.Component {
     let platformNum = 0, functionNum = 0;
     (this.state.resultData || []).map((item) => {
       platformNum += 1;
-      (item.children || []).map((item, index) => {//第一节
+      (item.children || []).map((item) => {//第一节
         if (item.children && item.children.length) {//判断是否有二层子节点
-          let children = (item.children || []).map((child, cindex) => {
+          let children = (item.children || []).map((child) => {
             if (child.children && child.children.length) {//判断是否有三层子节点
               functionNum += child.children.length;
             } else {
@@ -244,16 +245,16 @@ class StepThreeComponent extends React.Component {
               num += child.children.length;
               let children2 = (child.children || []).map((child2, cindex2) => {
                 return (<label key={child2.idx + '-' + cindex2} htmlFor={item.idx + '-' + child.idx + '-' + child2.idx}
-                               className="function-label">
-                  {eval("'" + child2.text + "'")}
+                               className='function-label'>
+                  {eval('\'' + child2.text + '\'')}
                 </label>);
               });
 
               return (
                 <tr className={cindex % 2 ? 'even' : 'odd'} key={child.idx + '-' + cindex}>
-                  { cindex != 0 || <td rowSpan={item.children.length}>{eval("'" + item.text + "'")}</td>}
-                  <td><label htmlFor={child.idx + '-' + cindex} className="module-label">
-                    <span>{eval("'" + child.text + "'")}</span>
+                  { cindex != 0 || <td rowSpan={item.children.length}>{eval('\'' + item.text + '\'')}</td>}
+                  <td><label htmlFor={child.idx + '-' + cindex} className='module-label'>
+                    <span>{eval('\'' + child.text + '\'')}</span>
                   </label></td>
                   <td>{children2}</td>
                 </tr>
@@ -263,9 +264,9 @@ class StepThreeComponent extends React.Component {
               num += 1;
               return (
                 <tr className={cindex % 2 ? 'even' : 'odd'} key={child.idx + '-' + cindex}>
-                  { cindex != 0 || <td rowSpan={item.children.length}>{eval("'" + item.text + "'")}</td>}
-                  <td><label htmlFor={child.idx + '-' + cindex} className="module-label">
-                    <span>{eval("'" + child.text + "'")}</span>
+                  { cindex != 0 || <td rowSpan={item.children.length}>{eval('\'' + item.text + '\'')}</td>}
+                  <td><label htmlFor={child.idx + '-' + cindex} className='module-label'>
+                    <span>{eval('\'' + child.text + '\'')}</span>
                   </label></td>
                   <td></td>
                 </tr>
@@ -276,7 +277,7 @@ class StepThreeComponent extends React.Component {
         } else {
           return (
             <tr className={index % 2 ? 'odd' : 'even'} key={index}>
-              <td rowSpan={item.children.length}>{eval("'" + item.text + "'")}</td>
+              <td rowSpan={item.children.length}>{eval('\'' + item.text + '\'')}</td>
               <td></td>
               <td></td>
             </tr>
@@ -284,14 +285,14 @@ class StepThreeComponent extends React.Component {
         }
       });
       return (
-        <div className="list-box" key={item.idx}>
-          <div className="simple-wrapper">
-            <div className="tabs-title">
-              <span className="name">{item.text}<em>{num}</em></span>
+        <div className='list-box' key={item.idx}>
+          <div className='simple-wrapper'>
+            <div className='tabs-title'>
+              <span className='name'>{item.text}<em>{num}</em></span>
             </div>
           </div>
-          <div className="table-wrapper">
-            <div className="functions">
+          <div className='table-wrapper'>
+            <div className='functions'>
               <table>
                 <thead>
                 <tr>
@@ -311,18 +312,18 @@ class StepThreeComponent extends React.Component {
     });
 
     return (
-      <div className="stepthree-component">
+      <div className='stepthree-component'>
         { this.state.visibleResultWrapper ||
-        <div className="quote">
-          <ul className="steps clearfix">
-            <li className="">
+        <div className='quote'>
+          <ul className='steps clearfix'>
+            <li className=''>
               <em>1</em>
               <span>
                 <label>第一步，</label>
                 <label>功能评估</label>
               </span>
             </li>
-            <li className="current">
+            <li className='current'>
               <em>2</em>
               <span>
                 <label>第二步，</label>
@@ -330,21 +331,21 @@ class StepThreeComponent extends React.Component {
               </span>
             </li>
           </ul>
-          <div className="wrapper">
-            <div className="quote-board">
-              <article className="flex-box">
-                <div className="flex-auto-justify">
+          <div className='wrapper'>
+            <div className='quote-board'>
+              <article className='flex-box'>
+                <div className='flex-auto-justify'>
                   <h1>项目规划评估统计</h1>
                   <em>平台数量：<span>{platformNum}</span>个</em>
                   <em>功能模块：<span>{functionNum}</span>个</em>
-                  <div className="detail">
+                  <div className='detail'>
                     {/*<Button className='see-fun-list-btn' htmlType='button' onClick={() => {*/}
                       {/*this.seeFunctionList()*/}
                     {/*}}>{this.state.visible ? '隐藏功能清单' : '查看功能清单'}</Button>*/}
                   </div>
                 </div>
-                <div className="right">
-                  <Button className="adjust-btn" htmlType='button' onClick={() => {
+                <div className='right'>
+                  <Button className='adjust-btn' htmlType='button' onClick={() => {
                     let project = SS.getObj(Config.project) || {};
                     project.idxtree = JSON.parse(this.state.selectedPaltforms);
                     SS.setObj(Config.project, project);
@@ -353,7 +354,7 @@ class StepThreeComponent extends React.Component {
                   }}>调整需求重新计算</Button>
                 </div>
               </article>
-              <div className="button-wrapper">
+              <div className='button-wrapper'>
                 <Button className={this.state.selectedPaltforms.length > 0 ? 'button primary' : 'button disabled'}
                         onClick={() => {this.submitSaveQuote()}}>保存到我的项目</Button>
                 <Button className={this.state.selectedPaltforms.length > 0 ? 'button primary' : 'button disabled'}
@@ -362,31 +363,31 @@ class StepThreeComponent extends React.Component {
                 }}>下载评估报表</Button>
               </div>
             </div>
-            <Spin tip="数据加载中..." spinning={this.state.loading}>
-              <div className="function-list-wrapper">
+            <Spin tip='数据加载中...' spinning={this.state.loading}>
+              <div className='function-list-wrapper'>
                 {funItem}
               </div>
             </Spin>
           </div>
-          <Modal title={<div className="modal-form-title"><h2>保存报价</h2><p>您保存的项目，可以在「我的项目」列表查看或编辑。</p></div>}
+          <Modal title={<div className='modal-form-title'><h2>保存报价</h2><p>您保存的项目，可以在「我的项目」列表查看或编辑。</p></div>}
                  visible={this.state.visibleSaveFun}
                  width='34.4rem'
-                 wrapClassName="save-fun-modal"
+                 wrapClassName='save-fun-modal'
                  onOk={null} onCancel={() => {
             this.handleSaveFunCancel()
           }} footer={null}
           >
             <Form horizontal>
-              <div className="modal-form-box">
+              <div className='modal-form-box'>
                 <div className='modal-input-area'>
                   {getFieldDecorator('platformNum', {initialValue: platformNum})(
-                    <input type="hidden"/>
+                    <input type='hidden'/>
                   )}
                   {getFieldDecorator('functionNum', {initialValue: functionNum})(
-                    <input type="hidden"/>
+                    <input type='hidden'/>
                   )}
                   {getFieldDecorator('objectId')(
-                    <input type="hidden"/>
+                    <input type='hidden'/>
                   )}
                   {getFieldDecorator('project_name', {
                     rules: [{required: true, message: '请填写项目名称', type: 'string'}]
@@ -407,7 +408,7 @@ class StepThreeComponent extends React.Component {
                 </div>
                 <div className='modal-input-area'>
                   {getFieldDecorator('project_desc')(
-                    <Input name='project_desc' type='textarea' rows="6" placeholder='填写项目描述' autoComplete='off'/>
+                    <Input name='project_desc' type='textarea' rows='6' placeholder='填写项目描述' autoComplete='off'/>
                   )}
                 </div>
                 {
@@ -441,8 +442,8 @@ class StepThreeComponent extends React.Component {
         </div>
         }
         { !this.state.visibleResultWrapper ||
-        <div className="result-wrapper">
-          <div className="success-icon">
+        <div className='result-wrapper'>
+          <div className='success-icon'>
             <i className='iconfont'>&#xe60b;</i>
           </div>
           <h1>保存成功!</h1>
@@ -450,8 +451,8 @@ class StepThreeComponent extends React.Component {
           <Button className='see-btn' htmlType='button' onClick={() => {
             window.location.href = '#/user/projects';
           }}>查看我的项目</Button>
-          <hr className="success-hr hide"/>
-          <h2 className="hide">心动了吗？立即发布需求！</h2>
+          <hr className='success-hr hide'/>
+          <h2 className='hide'>心动了吗？立即发布需求！</h2>
           <Button className='see-btn primary-btn hide' htmlType='button'>发布需求</Button>
         </div>
         }

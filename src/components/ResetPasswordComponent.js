@@ -9,7 +9,6 @@ import classnames from 'classnames';
 import Console from '../Console';
 import Config from 'config';
 import request from '../Request';
-import SS from  'parsec-ss';
 
 require('styles//ResetPassword.less');
 
@@ -40,11 +39,9 @@ class ResetPasswordComponent extends React.Component {
   }
 
   componentWillMount() {
-    console.log('componentWillMount');
     MiniLogin.hide();
     let account = this.props.location.query.account;
     if(!!this.props.location.query.account){
-      console.log('account',account);
       this.setState({resetStep:'reset-step-2', errorMap: {} },()=>{
         this.props.history.replace({
           pathname: 'resetPassword',
@@ -56,7 +53,7 @@ class ResetPasswordComponent extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('componentWillReceiveProps');
+    this.props = nextProps;
     MiniLogin.hide();
     if (this.xhr && this.xhr.abort) {
       this.xhr.abort();
@@ -68,10 +65,9 @@ class ResetPasswordComponent extends React.Component {
       this.xhr.abort();
     }
     clearInterval(this.interval);
-    console.log('componentWillUnmount');
   }
   componentDidMount(){
-    console.log('componentDidMount');
+    //console.log('componentDidMount');
   }
 
   handleRegSubmit() {
@@ -156,6 +152,7 @@ class ResetPasswordComponent extends React.Component {
       this.props.form.validateFields((errors, values) => {
         errors = errors['phone'];
         Console.log(errors);
+        Console.log(values);
         if (!!errors) {
           errorMap['phone'] = errors['errors'][0]['message'];
           this.setState({
@@ -320,7 +317,7 @@ class ResetPasswordComponent extends React.Component {
                 </Button>
 
                 <div className='account-bottom-tip to-login'>
-                  <label><a href="javascript:history.back(-1);">返回</a></label>
+                  <label><a href='javascript:history.back(-1);'>返回</a></label>
                 </div>
               </div>
             </div>
@@ -378,8 +375,8 @@ class ResetPasswordComponent extends React.Component {
                   <div className='account-input-area'>
                     {getFieldDecorator('password', {
                       rules: [
-                        {required: true, pattern: /\S{6,18}/, message: '密码长度为6~18位', type: 'string'},
-                      ],
+                        {required: true, pattern: /\S{6,18}/, message: '密码长度为6~18位', type: 'string'}
+                      ]
                     })(
                       <Input name='password' type='password' placeholder='密码' autoComplete='off'
                              className={classnames({'format-error' : this.state.errorMap.password})} onContextMenu={false}
@@ -402,8 +399,8 @@ class ResetPasswordComponent extends React.Component {
                         whitespace: true,
                         pattern: /\S{6,18}/, message: '密码长度为6~18位', type: 'string'
                       }, {
-                        validator: this.checkPass2,
-                      }],
+                        validator: this.checkPass2
+                      }]
                     })(
                       <Input name='repeat-password' type='password' placeholder='重复密码' autoComplete='off'
                              className={classnames({'format-error' : this.state.errorMap.rePasswd})} onContextMenu={false} onPaste={false} onCopy={false}
@@ -430,7 +427,7 @@ class ResetPasswordComponent extends React.Component {
                   </Button>
 
                   <div className='account-bottom-tip to-login'>
-                    <label><a href="javascript:history.back(-1);">返回</a></label>
+                    <label><a href='javascript:history.back(-1);'>返回</a></label>
                   </div>
                 </div>
               </Form>

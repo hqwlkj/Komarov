@@ -2,7 +2,7 @@
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {Button, Form, Row, Col, Icon, Input} from 'antd';
+import {Button, Form, Input} from 'antd';
 import Console from '../Console';
 import Config from 'config';
 import request from '../Request';
@@ -29,8 +29,7 @@ class MiniLoginComponent extends React.Component {
   }
 
   doProps(props) {
-    this.setState({
-    });
+    this.props = props;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -52,9 +51,9 @@ class MiniLoginComponent extends React.Component {
       if (!!errors) {
         for (let key in errors) {
           this.setState({
-            errormsg: errors[key]["errors"][0]["message"]
+            errormsg: errors[key]['errors'][0]['message']
           });
-          Console.log(errors[key]["errors"][0]["message"]);
+          Console.log(errors[key]['errors'][0]['message']);
           return;
         }
       }
@@ -98,43 +97,43 @@ class MiniLoginComponent extends React.Component {
     const { getFieldDecorator } = this.props.form;
 
     return (
-      <div className="minilogin-component" style={{display: this.state.visible ? 'block' : 'none'}}>
-        <div className="mini-login-modal">
-          <div className="mini-login-modal-content">
-            <Button shape="circle-outline" className="mini-login-modal-close" onClick={()=>{this.closeLoginWindow()}}><i className="iconfont">&#xe608;</i></Button>
-            <div className="mini-login-modal-header">
-              <div className="mini-login-modal-title">账户登录</div>
+      <div className='minilogin-component' style={{display: this.state.visible ? 'block' : 'none'}}>
+        <div className='mini-login-modal'>
+          <div className='mini-login-modal-content'>
+            <Button shape='circle-outline' className='mini-login-modal-close' onClick={()=>{this.closeLoginWindow()}}><i className='iconfont'>&#xe608;</i></Button>
+            <div className='mini-login-modal-header'>
+              <div className='mini-login-modal-title'>账户登录</div>
             </div>
-            <div className="mini-login-modal-body">
-              <div className={this.state.errormsg === '' ? 'mini-msg error hide' : 'mini-msg error'}><i className="iconfont">&#xe60a;</i>{this.state.errormsg}</div>
-              <div className="login-form">
-                <div className="item username">
-                  <i className="iconfont">&#xe609;</i>
+            <div className='mini-login-modal-body'>
+              <div className={this.state.errormsg === '' ? 'mini-msg error hide' : 'mini-msg error'}><i className='iconfont'>&#xe60a;</i>{this.state.errormsg}</div>
+              <div className='login-form'>
+                <div className='item username'>
+                  <i className='iconfont'>&#xe609;</i>
                   {getFieldDecorator('username', {
                     rules: [
-                      { required: true, message: '请输入正确的手机号码', type: 'string'},
-                    ],
+                      { required: true, message: '请输入正确的手机号码', type: 'string'}
+                    ]
                   })(
-                    <Input id="username" name="username" type="text" placeholder="手机号码" autoComplete="off" />
+                    <Input id='username' name='username' type='text' placeholder='手机号码' autoComplete='off' />
                   )}
                 </div>
-                <div className="item password">
-                  <i className="iconfont">&#xe607;</i>
+                <div className='item password'>
+                  <i className='iconfont'>&#xe607;</i>
                   {getFieldDecorator('password', {
                     rules: [
-                      { required: true,  pattern: /\S{6,18}/, message: "密码长度为6~18位",type: 'string'},
-                    ],
+                      { required: true,  pattern: /\S{6,18}/, message: '密码长度为6~18位',type: 'string'}
+                    ]
                   })(
-                    <Input id="password" name="password" type="password" placeholder="密码" autoComplete="off"/>
+                    <Input id='password' name='password' type='password' placeholder='密码' autoComplete='off'/>
                   )}
                 </div>
-                <div className="item">
-                  <Button type="primary" className="login-btn" onClick={()=> {
+                <div className='item'>
+                  <Button type='primary' className='login-btn' onClick={()=> {
                     this.handleLoginSubmit()
                   }}>登录</Button>
                 </div>
-                <div className="item login-links hide">
-                  <a href="#/register">免费注册</a>
+                <div className='item login-links hide'>
+                  <a href='#/register'>免费注册</a>
                 </div>
               </div>
             </div>

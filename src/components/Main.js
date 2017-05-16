@@ -2,15 +2,9 @@ require('normalize.css/normalize.css');
 require('styles/App.less');
 
 import React from 'react';
-import {Row, Col} from 'antd';
-import SS from 'parsec-ss';
-
 import Foooter from './FooterComponent';
 import Header from './HeaderComponent';
 import SideBar from './SideBarComponent';
-
-
-import Config from 'config';
 
 class AppComponent extends React.Component {
   constructor(props) {

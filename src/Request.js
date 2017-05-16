@@ -12,7 +12,6 @@ export default (option)=> {
     if (!!error) {
       error({message:textStatus});
     }else{
-      console.log("error:", jqXHR.status === 401)
       switch (jqXHR.status) {
         case(500):
           break;
@@ -56,14 +55,14 @@ export default (option)=> {
     cache: false,
     beforeSend: function (xhr) {
       xhr.setRequestHeader(Config.token, SS.get(Config.token) == null ? '' : SS.get(Config.token));
-      //xhr.setRequestHeader("Content-Type","application/json");
+      //xhr.setRequestHeader('Content-Type','application/json');
       // xhr.setRequestHeader(Config.tokenId, SS.get(Config.tokenId) == null ? '' : SS.get(Config.tokenId));
-    },
+    }
     //dataType: 'json',
-    //contentType: "application/json"
+    //contentType: 'application/json'
   });
 
-  if(!!option.type && option.type != "get"){
+  if(!!option.type && option.type != 'get'){
     option.data = JSON.stringify(option.data);
   }
 

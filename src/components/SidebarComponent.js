@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import {Icon, Button, Form, Radio, Rate, Input, Modal} from 'antd';
+import { Button, Form, Radio, Input, Modal} from 'antd';
 import Config from 'config';
 import $ from  'jquery';
 import request from '../Request';
@@ -57,10 +57,9 @@ class SideBarComponent extends React.Component {
   handleFeedbackSubmit() {
     this.props.form.validateFields((errors, values) => {
       if (errors) {
-        console.log('Errors in form!!!');
+        //console.log('Errors in form!!!');
         return;
       }
-      console.log(values);
       request({
         type:'post',
         url: Config.host + '/feedback/email',
@@ -82,7 +81,7 @@ class SideBarComponent extends React.Component {
     const {getFieldDecorator} = this.props.form;
     const formItemLayout = {
       labelCol: {span: 0},
-      wrapperCol: {span: 24},
+      wrapperCol: {span: 24}
     };
     return (
       <div className='sidebar-component'>
@@ -120,31 +119,15 @@ class SideBarComponent extends React.Component {
             </div>
             <div className='feedback-form'>
               <Form horizontal>
-                {/*<Form.Item*/}
-                  {/*{...formItemLayout}*/}
-                {/*>*/}
-                  {/*{getFieldDecorator('rate', { initialValue:'1' },{*/}
-                    {/*rules: [*/}
-                      {/*{required: true, min:1, message: '请选择体验类型',type:'number'},*/}
-                    {/*],*/}
-                  {/*})(*/}
-                    {/*<span>*/}
-                      {/*哈哈啊：<Rate onChange={(value)=> {*/}
-                        {/*this.handleStarsChange(value)*/}
-                      {/*}} value={this.state.starsValue} />*/}
-                      {/*{this.state.starsValue && <span className='ant-rate-text'>{this.state.starsValue} 星</span>}*/}
-                    {/*</span>*/}
-                  {/*)}*/}
-                {/*</Form.Item>*/}
                 <Form.Item
                   {...formItemLayout}
                 >
                   {getFieldDecorator('username', {
                     rules: [
-                      {required: true, max:11, message: '请输入你的姓名',type:'string'},
-                    ],
+                      {required: true, max:11, message: '请输入你的姓名',type:'string'}
+                    ]
                   })(
-                    <Input autoComplete="off" placeholder="请输入你的姓名"/>
+                    <Input autoComplete='off' placeholder='请输入你的姓名'/>
                   )}
                 </Form.Item>
                 <Form.Item
@@ -152,10 +135,10 @@ class SideBarComponent extends React.Component {
                 >
                   {getFieldDecorator('contact',{
                     rules: [
-                      {required: true, max:11, message: '请输入你的手机号码',type:'string'},
-                    ],
+                      {required: true, max:11, message: '请输入你的手机号码',type:'string'}
+                    ]
                   })(
-                    <Input autoComplete="off" placeholder="请输入你的手机号码"/>
+                    <Input autoComplete='off' placeholder='请输入你的手机号码'/>
                   )}
                 </Form.Item>
                 <Form.Item
@@ -163,7 +146,7 @@ class SideBarComponent extends React.Component {
                 >
                   {getFieldDecorator('type', { initialValue: '体验反馈' },{
                     rules: [
-                      {required: true, message: '请选择体验类型'},
+                      {required: true, message: '请选择体验类型'}
                     ]
                   })(
                     <Radio.Group>
@@ -179,14 +162,14 @@ class SideBarComponent extends React.Component {
                   {getFieldDecorator('message', {
                     validate: [{
                       rules: [
-                        {required: true, min:5, message: '请输入您的反馈信息'},
+                        {required: true, min:5, message: '请输入您的反馈信息'}
                       ],
-                      trigger: 'onBlur',
+                      trigger: 'onBlur'
                     }, {
                       rules: [
-                        { type: 'string', min:5, message: '请输入您的反馈信息' },
+                        { type: 'string', min:5, message: '请输入您的反馈信息' }
                       ],
-                      trigger: ['onBlur', 'onChange'],
+                      trigger: ['onBlur', 'onChange']
                     }]
                   })(
                     <Input type='textarea' id='control-textarea' rows='5' placeholder='您的反馈对我们来说很重要^.^'/>

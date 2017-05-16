@@ -9,7 +9,6 @@ import classnames from 'classnames';
 import Console from '../Console';
 import Config from 'config';
 import request from '../Request';
-import SS from  'parsec-ss';
 
 require('styles//Register.less');
 
@@ -46,6 +45,7 @@ class RegisterComponent extends React.Component {
     if (this.xhr && this.xhr.abort) {
       this.xhr.abort();
     }
+    this.props = nextProps;
   }
 
   componentWillUnmount() {
@@ -273,7 +273,7 @@ class RegisterComponent extends React.Component {
                   <div className='account-input-area'>
                     {getFieldDecorator('global_key', {
                       rules: [
-                        {required: true, message: '个性后缀至少为3位字符', min: 3, type: 'string'},
+                        {required: true, message: '个性后缀至少为3位字符', min: 3, type: 'string'}
                       ]
                     })(
                       <Input name='global_key' type='text' placeholder='用户名 (即个性后缀，注册后无法修改)'
@@ -332,8 +332,8 @@ class RegisterComponent extends React.Component {
                   <div className='account-input-area'>
                     {getFieldDecorator('password', {
                       rules: [
-                        {required: true, pattern: /\S{6,18}/, message: '密码长度为6~18位', type: 'string'},
-                      ],
+                        {required: true, pattern: /\S{6,18}/, message: '密码长度为6~18位', type: 'string'}
+                      ]
                     })(
                       <Input name='password' type='password' placeholder='密码' autoComplete='off'
                              className={classnames({'format-error' : this.state.errorMap.password})} onContextMenu={false}
@@ -356,8 +356,8 @@ class RegisterComponent extends React.Component {
                         whitespace: true,
                         pattern: /\S{6,18}/, message: '密码长度为6~18位', type: 'string'
                       }, {
-                        validator: this.checkPass2,
-                      }],
+                        validator: this.checkPass2
+                      }]
                     })(
                       <Input name='repeat-password' type='password' placeholder='重复密码' autoComplete='off'
                              className={classnames({'format-error' : this.state.errorMap.rePasswd})} onContextMenu={false} onPaste={false} onCopy={false}

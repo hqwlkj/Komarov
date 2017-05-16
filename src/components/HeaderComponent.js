@@ -1,11 +1,10 @@
 'use strict';
 
 import React from 'react';
-import {Dropdown, Menu, Badge, Icon, Modal} from 'antd';
+import {Dropdown, Menu, Modal} from 'antd';
 import SS from  'parsec-ss';
 import LS from  'parsec-ls';
 import Config from 'config';
-import Console from '../Console';
 import request from '../Request';
 
 require('styles//Header.less');

@@ -12,7 +12,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Router, Route, IndexRoute, hashHistory} from 'react-router';
 import Main from './components/Main';
-import StepOne from './components/IndexComponent';
+//import StepOne from './components/IndexComponent';
 import Login from './components/LoginComponent';
 import Register from './components/RegisterComponent';
 import UserCenter from './components/UserCenterComponent';

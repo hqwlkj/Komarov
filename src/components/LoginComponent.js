@@ -34,12 +34,12 @@ class LoginComponent extends React.Component {
         for (let key in errors) {
           notification['error']({
             duration:3,
-            message: errors[key]["errors"][0]["message"]
+            message: errors[key]['errors'][0]['message']
           });
           this.setState({
-            errormsg: errors[key]["errors"][0]["message"]
+            errormsg: errors[key]['errors'][0]['message']
           });
-          Console.log(errors[key]["errors"][0]["message"]);
+          Console.log(errors[key]['errors'][0]['message']);
           return;
         }
       }
@@ -57,7 +57,7 @@ class LoginComponent extends React.Component {
       success: (data)=> {
         Console.log(data);
         SS.set(Config.token, data.token);
-        window.location.href = "#/?";
+        window.location.href = '#/?';
       },
       error: (data)=> {
         notification['error']({
@@ -71,47 +71,47 @@ class LoginComponent extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     return (
-      <div className="login-component">
+      <div className='login-component'>
         <Header />
-        <div className="content-wrapper">
-          <div className="account-box-wrapper">
-            <div className="account-box">
+        <div className='content-wrapper'>
+          <div className='account-box-wrapper'>
+            <div className='account-box'>
               <Form horizontal >
-                <div className="account-form-title">
-                  <label htmlFor="">账号登录</label>
+                <div className='account-form-title'>
+                  <label htmlFor=''>账号登录</label>
                 </div>
-                <div className="account-input-area">
+                <div className='account-input-area'>
                   {getFieldDecorator('username', {
                     rules: [
-                      { required: true, message: '请输入正确的手机号码', type: 'string'},
-                    ],
+                      { required: true, message: '请输入正确的手机号码', type: 'string'}
+                    ]
                   })(
-                    <Input id="username" name="username" type="text" placeholder="手机号码" autoComplete="off" />
+                    <Input id='username' name='username' type='text' placeholder='手机号码' autoComplete='off' />
                   )}
                 </div>
-                <div className="account-input-area">
+                <div className='account-input-area'>
                   {getFieldDecorator('password', {
                     rules: [
-                      { required: true,  pattern: /\S{6,18}/, message: "密码长度为6~18位",type: 'string'},
-                    ],
+                      { required: true,  pattern: /\S{6,18}/, message: '密码长度为6~18位',type: 'string'}
+                    ]
                   })(
-                    <Input id="password" name="password" type="password" placeholder="密码" autoComplete="off"/>
+                    <Input id='password' name='password' type='password' placeholder='密码' autoComplete='off'/>
                   )}
                 </div>
-                <div className="account-input-area account-captcha hide">
-                  <Input id="captcha" name="captcha" type="text" placeholder="验证码" className="short" autoComplete="off"/>
-                  <img className="captcha" alt="验证码" src="" />
+                <div className='account-input-area account-captcha hide'>
+                  <Input id='captcha' name='captcha' type='text' placeholder='验证码' className='short' autoComplete='off'/>
+                  <img className='captcha' alt='验证码' src='' />
                 </div>
-                <div className="check-box ">
+                <div className='check-box '>
                   {getFieldDecorator('remember_me')(
-                    <Checkbox id="remember_me" name="remember_me">记住我</Checkbox>
+                    <Checkbox id='remember_me' name='remember_me'>记住我</Checkbox>
                   )}
-                  {/*<input id="remember_me" name="remember_me" type="checkbox" />*/}
-                  {/*<label htmlFor="remember_me"></label>*/}
+                  {/*<input id='remember_me' name='remember_me' type='checkbox' />*/}
+                  {/*<label htmlFor='remember_me'></label>*/}
                   {/*<span>记住我</span>*/}
-                  <a href="#/resetPassword" className="reset-password-href">找回密码</a>
+                  <a href='#/resetPassword' className='reset-password-href'>找回密码</a>
                 </div>
-                <Button className="account-button login-btn" type="button" onClick={()=>{this.handleLoginSubmit()}}><span>登录</span></Button>
+                <Button className='account-button login-btn' type='button' onClick={()=>{this.handleLoginSubmit()}}><span>登录</span></Button>
               </Form>
             </div>
           </div>

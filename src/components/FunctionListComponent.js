@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import {Breadcrumb, Button, Modal, Form, Input, message, Spin, Tooltip,Switch} from 'antd';
+import {Breadcrumb, Button, message, Spin, Tooltip,Switch} from 'antd';
 import MiniLogin from './MiniLoginComponent';
 import SS from 'parsec-ss';
 import dateFormat from 'date-format';
@@ -43,7 +43,7 @@ class FunctionListComponent extends React.Component {
       message.success('复制成功');
       e.clearSelection();
     });
-    clipboard.on('error', function (e) {
+    clipboard.on('error', function () {
       message.error('复制失败');
     });
   }
@@ -70,10 +70,9 @@ class FunctionListComponent extends React.Component {
   }
 
   loadFunctionListData(idxtree){
-    console.log('idxtree',idxtree);
     this.setState({
       loading: true,
-      platformsData:[],
+      platformsData:[]
     });
     request({
       type:'post',
@@ -119,11 +118,11 @@ class FunctionListComponent extends React.Component {
     elem_form.appendChild(elem_input);
 
     this.setState({
-      downloadLoading: true,
+      downloadLoading: true
     },()=>{
       elem_form.submit();
       this.setState({
-        downloadLoading: false,
+        downloadLoading: false
       });
     });
   }
@@ -145,7 +144,7 @@ class FunctionListComponent extends React.Component {
 
   //得到分享链接
   getShareLink(checked,objectId){
-    let shareLink = window.location.protocol + "//" +window.location.host+'/#/projects/view/';
+    let shareLink = window.location.protocol + '//' +window.location.host+'/#/projects/view/';
     shareLink += base64.encode(objectId+'-'+new Date().getTime());
     if(checked) {
       this.setState({visibleShareLink: true,tipMsg:'该链接适用于所有人，无需登录(当日有效)。',shareLink:shareLink});
@@ -164,16 +163,16 @@ class FunctionListComponent extends React.Component {
               num += child.children.length;
               let children2 = (child.children || []).map((child2, cindex2)=> {
                 return (<label key={child2.idx + '-' + cindex2} htmlFor={item.idx + '-' + child.idx + '-' + child2.idx}
-                               className="function-label">
-                  {eval("'" + child2.text + "'")}
+                               className='function-label'>
+                  {child2.text}
                 </label>);
               });
 
               return (
                 <tr className={cindex % 2 ? 'even' : 'odd'} key={child.idx + '-' + cindex}>
-                  { cindex != 0 || <td rowSpan={item.children.length}>{eval("'" + item.text + "'")}</td>}
-                  <td><label htmlFor={child.idx + '-' + cindex} className="module-label">
-                    <span>{eval("'" + child.text + "'")}</span>
+                  { cindex != 0 || <td rowSpan={item.children.length}>{item.text}</td>}
+                  <td><label htmlFor={child.idx + '-' + cindex} className='module-label'>
+                    <span>{child.text}</span>
                   </label></td>
                   <td>{children2}</td>
                 </tr>
@@ -183,9 +182,9 @@ class FunctionListComponent extends React.Component {
               num += 1;
               return (
                 <tr className={cindex % 2 ? 'even' : 'odd'} key={child.idx + '-' + cindex}>
-                  { cindex != 0 || <td rowSpan={item.children.length}>{eval("'" + item.text + "'")}</td>}
-                  <td><label htmlFor={child.idx + '-' + cindex} className="module-label">
-                    <span>{eval("'" + child.text + "'")}</span>
+                  { cindex != 0 || <td rowSpan={item.children.length}>{item.text}</td>}
+                  <td><label htmlFor={child.idx + '-' + cindex} className='module-label'>
+                    <span>{child.text}</span>
                   </label></td>
                   <td></td>
                 </tr>
@@ -196,7 +195,7 @@ class FunctionListComponent extends React.Component {
         } else {
           return (
             <tr className={index % 2 ? 'odd' : 'even'} key={index}>
-              <td rowSpan={item.children.length}>{eval("'" + item.text + "'")}</td>
+              <td rowSpan={item.children.length}>{item.text}</td>
               <td></td>
               <td></td>
             </tr>
@@ -204,14 +203,14 @@ class FunctionListComponent extends React.Component {
         }
       });
       return(
-        <div className="list-box" key={item.idx}>
-          <div className="simple-wrapper">
-            <div className="tabs-title">
-              <span className="name">{item.text}<em>{num}</em></span>
+        <div className='list-box' key={item.idx}>
+          <div className='simple-wrapper'>
+            <div className='tabs-title'>
+              <span className='name'>{item.text}<em>{num}</em></span>
             </div>
           </div>
-          <div className="table-wrapper">
-            <div className="functions">
+          <div className='table-wrapper'>
+            <div className='functions'>
               <table>
                 <thead>
                 <tr>
@@ -230,56 +229,56 @@ class FunctionListComponent extends React.Component {
       );
     });
 
-    let shareWrapper = <div className="share-wrapper">
-      <div className="share-header">
-        <label htmlFor="">分享项目</label>
-        <div className="switcher">
+    let shareWrapper = <div className='share-wrapper'>
+      <div className='share-header'>
+        <label htmlFor=''>分享项目</label>
+        <div className='switcher'>
           <Switch defaultChecked={false} onChange={(checked)=>{
             this.getShareLink(checked,this.state.projectData.objectId);
           }}/>
         </div>
-        <p className="tip">{this.state.tipMsg}</p>
-        <div className="copy-input-group">
-          <input type="text" id="shareLink" value={this.state.shareLink} readOnly="readOnly" style={{display:this.state.visibleShareLink ? 'inline-block' : 'none'}}/>
-          <Tooltip placement="bottomRight" getTooltipContainer={()=>document.querySelector('.share-wrapper')} title='点击复制'>
-            <Button data-clipboard-target="#shareLink" icon='copy' className="copy-btn" style={{display:this.state.visibleShareLink ? 'inline-block' : 'none'}} />
+        <p className='tip'>{this.state.tipMsg}</p>
+        <div className='copy-input-group'>
+          <input type='text' id='shareLink' value={this.state.shareLink} readOnly='readOnly' style={{display:this.state.visibleShareLink ? 'inline-block' : 'none'}}/>
+          <Tooltip placement='bottomRight' getTooltipContainer={()=>document.querySelector('.share-wrapper')} title='点击复制'>
+            <Button data-clipboard-target='#shareLink' icon='copy' className='copy-btn' style={{display:this.state.visibleShareLink ? 'inline-block' : 'none'}} />
           </Tooltip>
         </div>
       </div>
     </div>;
 
     return (
-      <div className="functionlist-component">
-        <div className="content">
-          <div className="breadcrumb-wrapper">
+      <div className='functionlist-component'>
+        <div className='content'>
+          <div className='breadcrumb-wrapper'>
             <Breadcrumb>
               <Breadcrumb.Item><a href='#/user/projects'>我的项目</a></Breadcrumb.Item>
               <Breadcrumb.Item>功能清单</Breadcrumb.Item>
             </Breadcrumb>
           </div>
-          <div className="function-wrapper">
-            <Spin tip="数据加载中..." spinning={this.state.loading}>
-              <div className="item-header">
-                <h2 className="item-name">{this.state.projectData.project_name}</h2>
-                <p className="item-desc">{this.state.projectData.project_desc}</p>
-                <div className="info">
-                  <div className="counts">平台数量：<em>{this.state.projectData.platformNum || 0}</em>个</div>
-                  <div className="counts">功能模块：<em>{this.state.projectData.functionNum || 0}</em>个</div>
-                  <div className="time">创建时间：<em>{!this.state.projectData.createTime || dateFormat('yyyy-MM-dd hh:mm:ss', new Date(this.state.projectData.createTime))}</em></div>
+          <div className='function-wrapper'>
+            <Spin tip='数据加载中...' spinning={this.state.loading}>
+              <div className='item-header'>
+                <h2 className='item-name'>{this.state.projectData.project_name}</h2>
+                <p className='item-desc'>{this.state.projectData.project_desc}</p>
+                <div className='info'>
+                  <div className='counts'>平台数量：<em>{this.state.projectData.platformNum || 0}</em>个</div>
+                  <div className='counts'>功能模块：<em>{this.state.projectData.functionNum || 0}</em>个</div>
+                  <div className='time'>创建时间：<em>{!this.state.projectData.createTime || dateFormat('yyyy-MM-dd hh:mm:ss', new Date(this.state.projectData.createTime))}</em></div>
                 </div>
-                <div className="opera-buttons">
-                  <Button type="primary" icon='edit' onClick={()=>{this.goToStepTwo()}}>编辑功能清单</Button>
-                  <Button type="primary" icon='download' onClick={()=>{this.downloadTheReport(JSON.stringify(this.state.projectData.idxtree))}}>下载功能清单</Button>
-                  <Tooltip placement="bottomRight"
+                <div className='opera-buttons'>
+                  <Button type='primary' icon='edit' onClick={()=>{this.goToStepTwo()}}>编辑功能清单</Button>
+                  <Button type='primary' icon='download' onClick={()=>{this.downloadTheReport(JSON.stringify(this.state.projectData.idxtree))}}>下载功能清单</Button>
+                  <Tooltip placement='bottomRight'
                            getTooltipContainer={()=>document.querySelector('.opera-buttons')}
                            title={shareWrapper}>
-                    <Button type="primary" icon='share-alt'>分享</Button>
+                    <Button type='primary' icon='share-alt'>分享</Button>
                   </Tooltip>
                 </div>
               </div>
-              <div className="item-main">
+              <div className='item-main'>
                 <p>功能清单</p>
-                <div className="function-list-wrapper">
+                <div className='function-list-wrapper'>
                   {funItem}
                 </div>
               </div>
